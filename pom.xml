@@ -30,6 +30,13 @@
 		<java.version>21</java.version>
 	</properties>
 	<repositories>
+		<!-- Explicitly declare Maven Central -->
+		<repository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>false</enabled></snapshots>
+		</repository>
 		<repository>
 			<id>dcm4che-repo</id>
 			<url>https://maven.dcm4che.org/</url>
@@ -72,12 +79,18 @@
 			<version>5.30.0</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>s3</artifactId>
 			<version>2.25.25</version>
 		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>sts</artifactId>
+			<version>2.25.2</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
