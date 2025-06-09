@@ -24,4 +24,5 @@ azure:
   scope: ${AZURE_SCOPE}
   token-url: ${AZURE_TOKEN_URL}
   dicom-web-url: ${AZURE_DICOM_WEB_URL}
-  dicom-endpoint: ${AZURE_DICOM_ENDPOINT}
+  dicom-endpoint: "https://dicomworkspaceeastus.dicom.azurehealthcareapis.com"
+  sas-url: "https://dicomarchive123.blob.core.windows.net/dicom-archive?sv=2024-11-04&ss=b&srt=o&sp=wctfx&se=2026-06-05T19:33:32Z&st=2025-06-05T11:33:32Z&spr=https&sig=ehv1U421GD7fQdQWifN8zUOnMQrpg4T%2FXLHXXz3EZRw%3D"

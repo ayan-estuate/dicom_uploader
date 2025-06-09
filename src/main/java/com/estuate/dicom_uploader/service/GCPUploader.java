@@ -41,10 +41,11 @@ public class GCPUploader {
         post.setHeader("Authorization", "Bearer " + accessToken);
         post.setHeader("Content-Type", "application/dicom");
         post.setEntity(new ByteArrayEntity(dicomData, ContentType.create("application/dicom")));
-
+        log.info("before job:{}",System.currentTimeMillis());
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
 
+             CloseableHttpResponse response =  httpClient.execute(post)) {
+            log.info("Uploading DICOM to GCP: {}", dicomUri);
             int statusCode = response.getCode();
 
             if (statusCode == 409) {

@@ -16,6 +16,7 @@ public class AzureConfig {
     private String clientSecret;
     private String tenantId;
     private String scope;
+
 }
 
 

@@ -1,20 +1,17 @@
 package com.estuate.dicom_uploader.controller;
 
-
-
-import com.estuate.dicom_uploader.service.DicomUploaderService;
-import com.estuate.dicom_uploader.service.S3PresignedUrlService;
+import com.estuate.dicom_uploader.async.JobQueueManager;
+import com.estuate.dicom_uploader.model.Job;
+import com.estuate.dicom_uploader.model.JobStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.hc.core5.http.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Set;
 
 @RestController
@@ -24,26 +21,37 @@ import java.util.Set;
 @Slf4j
 public class DicomController {
 
-    private final DicomUploaderService dicomUploaderService;
-    private final S3PresignedUrlService s3PresignedUrlService;
+    private final JobQueueManager jobQueueManager;
 
     private static final Set<String> SUPPORTED_PLATFORMS = Set.of("gcp", "azure");
 
     public record UploadRequest(@NotBlank String objectKey, @NotBlank String platform) {}
-    public record UploadResponse(String status, String message) {}
+    public record UploadResponse(String status, String message, String jobId) {}
 
     @PostMapping("/upload")
-    public ResponseEntity<UploadResponse> uploadDicom(@RequestBody @Valid UploadRequest request) throws IOException, ParseException {
+    public ResponseEntity<UploadResponse> uploadDicom(@RequestBody @Valid UploadRequest request) throws IOException {
         String platformLower = request.platform().toLowerCase();
 
         if (!SUPPORTED_PLATFORMS.contains(platformLower)) {
             return ResponseEntity.badRequest()
-                    .body(new UploadResponse("error", "Unsupported platform: " + request.platform()));
+                    .body(new UploadResponse("error", "Unsupported platform: " + request.platform(), null));
         }
 
-        URL presignedUrl = s3PresignedUrlService.generatePresignedUrl(request.objectKey());
-        dicomUploaderService.upload(presignedUrl.toString(), platformLower);
+        Job job = jobQueueManager.enqueueJob(request.objectKey(), platformLower);
 
-        return ResponseEntity.ok(new UploadResponse("success", "DICOM uploaded to " + platformLower));
+        return ResponseEntity.ok(new UploadResponse("success", "Job queued", job.getJobId()));
     }
+
+    // Optional: Add API to query job status by jobId
+    @GetMapping("/status")
+    public ResponseEntity<?> getJobStatus(@RequestParam String jobId) throws IOException {
+        for (JobStatus status : JobStatus.values()) {
+            Job job = jobQueueManager.getJob(status, jobId);
+            if (job != null) {
+                return ResponseEntity.ok(job);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }

@@ -38,7 +38,7 @@ public class AzureUploader {
     }
 
     public void uploadToAzure(byte[] dicomData) throws IOException, ParseException {
-        String url = config.getDicomEndpoint() + "/dicomweb/studies";
+        String url = config.getDicomEndpoint() + "/studies";
         logger.info("full url {}",url);
         HttpPost post = new HttpPost(url);
         post.setHeader("Authorization", "Bearer " + getAzureToken());
