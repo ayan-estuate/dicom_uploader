@@ -25,15 +25,7 @@ public class JobProcessor {
         try {
             jobQueueManager.updateJobStatus(job, JobStatus.IN_PROGRESS);
 
-            // Construct presigned URL for S3 objectKey
-            // Here we assume S3PresignedUrlService is part of DicomUploaderService or injected elsewhere
-            // For demo, we assume DicomUploaderService exposes a method to get presigned URL by objectKey
-            // If not, inject S3PresignedUrlService separately and call it here.
 
-            // For now, let's assume job contains the presignedUrl directly or
-            // we need to call s3PresignedUrlService.generatePresignedUrl(objectKey)
-
-            // To keep aligned with your existing code, let's assume a helper:
 
             String presignedUrl = generatePresignedUrl.generatePresignedUrl(job.getObjectKey()).toString();
 
