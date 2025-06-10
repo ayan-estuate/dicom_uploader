@@ -184,9 +184,9 @@ GET /dicom/status/{jobId}
 }
 
 ```
-```
+
 ## 💼 Job Status Lifecycle
-```
+
 ```text
 QUEUED ➝ IN_PROGRESS ➝ COMPLETED / FAILED
 ```
