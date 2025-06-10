@@ -23,26 +23,6 @@ D:.
 |   \---wrapper
 |           maven-wrapper.properties
 |           
-+---jobs
-|   +---completed
-|   |       3a37950b-49e5-4474-925d-eb367fe275f4.json
-|   |       4b064e17-eef5-49c9-9953-3d56edf665d2.json
-|   |       5da37287-00cb-4d63-8421-15864829745a.json
-|   |       65ccbd97-5003-4056-bbd6-34c7f6f0e668.json
-|   |       6aec6da2-b687-48fd-92fc-bc6458517dc5.json
-|   |       81746844-c6b6-4c03-be66-e8a31f135865.json
-|   |       820a361b-614d-4907-a2fd-841a6ca329a3.json
-|   |       e3f15dda-ca90-4117-9ffa-5c85f0a1ddfa.json
-|   |       
-|   +---failed
-|   |       13cb57a0-b419-418c-9c57-724f44c0bb75.json
-|   |       6d733033-509b-47d2-82a6-31058f62575e.json
-|   |       8fd92524-2a3d-4ed7-933f-eb739445c660.json
-|   |       91047830-caf8-49e9-90db-0401a8e03efa.json
-|   |       fa388de9-2a9a-4cf4-970e-4f1c3c38fe61.json
-|   |       
-|   +---in_progress
-|   \---queued
 +---src
 |   +---main
 |   |   +---java
@@ -64,6 +44,10 @@ D:.
 |   |   |               |       
 |   |   |               +---controller
 |   |   |               |       DicomController.java
+|   |   |               |       
+|   |   |               +---dto
+|   |   |               |       UploadRequest.java
+|   |   |               |       UploadResponse.java
 |   |   |               |       
 |   |   |               +---exception
 |   |   |               |       DicomConflictException.java
@@ -117,9 +101,11 @@ D:.
     |               |       JacksonConfig.class
     |               |       
     |               +---controller
-    |               |       DicomController$UploadRequest.class
-    |               |       DicomController$UploadResponse.class
     |               |       DicomController.class
+    |               |       
+    |               +---dto
+    |               |       UploadRequest.class
+    |               |       UploadResponse.class
     |               |       
     |               +---exception
     |               |       DicomConflictException.class
