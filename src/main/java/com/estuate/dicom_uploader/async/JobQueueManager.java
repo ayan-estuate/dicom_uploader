@@ -1,5 +1,6 @@
 package com.estuate.dicom_uploader.async;
 
+import com.estuate.dicom_uploader.dto.UploadRequest;
 import com.estuate.dicom_uploader.model.Job;
 import com.estuate.dicom_uploader.model.JobStatus;
 import com.estuate.dicom_uploader.util.FileJobStore;
@@ -18,29 +19,26 @@ public class JobQueueManager {
     // This helper class handles reading and writing job files
     private final FileJobStore jobStore;
 
-    /**
-     * This method creates a new Job and saves it to the QUEUED folder.
-     *
-     * @param objectKey A unique file name or object identifier (like a DICOM file name)
-     * @param platform  Platform name (e.g., "GCP", "AWS", etc.)
-     * @return The Job that was created and saved
-     * @throws IOException If saving the job fails
-     */
-    public Job enqueueJob(String objectKey, String platform) throws IOException {
-        // Create a new Job object with unique ID and QUEUED status
+    public Job enqueueJob(UploadRequest request) throws IOException {
         Job job = Job.builder()
-                .jobId(UUID.randomUUID().toString()) // Generate random job ID
-                .objectKey(objectKey)
-                .platform(platform)
-                .status(JobStatus.QUEUED) // Set initial status
-                .createdAt(Instant.now()) // Set creation time
-                .updatedAt(Instant.now()) // Set last updated time
+                .jobId(UUID.randomUUID().toString())
+                .objectKey(request.getObjectKey())
+                .platform(request.getPlatform())
+                .storageType(request.getStorageType())
+                .datasetName(request.getDatasetName())
+                .dicomStoreName(request.getDicomStoreName())
+                .bucketName(request.getBucketName())
+                .blobContainer(request.getBlobContainer())
+                .blobPath(request.getBlobPath())
+                .status(JobStatus.QUEUED)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .build();
 
-        // Save the job to a JSON file in the queued folder
         jobStore.saveJob(job);
         return job;
     }
+
 
     /**
      * This method returns all the jobs that are currently in the QUEUED state.

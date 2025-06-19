@@ -29,7 +29,7 @@ public class JobProcessor {
 
             String presignedUrl = generatePresignedUrl.generatePresignedUrl(job.getObjectKey()).toString();
 
-            dicomUploaderService.upload(presignedUrl, job.getPlatform());
+            dicomUploaderService.upload(presignedUrl, job);
 
             jobQueueManager.updateJobStatus(job, JobStatus.COMPLETED);
             log.info("Job {} completed successfully", job.getJobId());

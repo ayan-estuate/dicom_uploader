@@ -1,0 +1,1 @@
+{"jobId":"0e83012e-3408-4c68-8153-b9cb81d5b906","objectKey":"DICOM2/dicom_00013659_019.dcm","platform":"azure","storageType":"blob","status":"FAILED","createdAt":"2025-06-19T10:31:30.147071900Z","updatedAt":"2025-06-19T10:31:44.302747900Z","errorMessage":"Azure Blob upload failed","datasetName":"my-dicom-dataset","dicomStoreName":"my-dicom-store","blobPath":"studies/2025/07/"}

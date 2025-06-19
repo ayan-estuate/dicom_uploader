@@ -1,10 +1,15 @@
 package com.estuate.dicom_uploader.service;
 
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobContainerClientBuilder;
 import com.estuate.dicom_uploader.config.AzureConfig;
 import com.estuate.dicom_uploader.exception.DicomConflictException;
 import com.estuate.dicom_uploader.exception.InvalidTokenException;
 import com.estuate.dicom_uploader.exception.UploadFailedException;
+import com.estuate.dicom_uploader.model.Job;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -21,21 +26,28 @@ import org.dcm4che3.data.Tag;
 import org.dcm4che3.io.DicomInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
+@Slf4j
 public class AzureUploader {
 
     private static final Logger logger = LoggerFactory.getLogger(AzureUploader.class);
 
     private final AzureConfig config;
     private final ObjectMapper mapper = new ObjectMapper();
+
+    @Value("${azure.blob.connection-string}")
+    private String connectionString;
 
     public AzureUploader(AzureConfig config) {
         this.config = config;
@@ -87,6 +99,43 @@ public class AzureUploader {
         }
     }
 
+    public void uploadToAzureBlob(byte[] fileData, Job job) throws IOException {
+        try {
+            // Initialize the container client
+            BlobContainerClient containerClient = new BlobContainerClientBuilder()
+                    .connectionString(connectionString)
+                    .containerName(job.getBlobContainer())
+                    .buildClient();
+
+            // Create the container if it doesn't exist
+            if (!containerClient.exists()) {
+                log.info("Container '{}' not found. Creating it...", job.getBlobContainer());
+                containerClient.create();
+            }
+            String objectFileName = Paths.get(job.getObjectKey()).getFileName().toString();
+
+            String blobName;
+            if (job.getBlobPath() != null && !job.getBlobPath().isBlank()) {
+                blobName = job.getBlobPath().replaceAll("/+$", "") + "/" + objectFileName;
+            } else {
+                blobName = objectFileName;
+            }
+
+            BlobClient blobClient = containerClient.getBlobClient(blobName);
+
+
+            // Upload the file
+            blobClient.upload(new ByteArrayInputStream(fileData), fileData.length, true);
+
+            log.info("File uploaded successfully to Azure Blob as '{}'", blobName);
+
+        } catch (Exception e) {
+            log.error("Failed to upload file to Azure Blob Storage", e);
+            throw new IOException("Azure Blob upload failed", e);
+        }
+    }
+
+
     private String getAzureToken() throws IOException {
         String tokenUrl = "https://login.microsoftonline.com/" + config.getTenantId() + "/oauth2/v2.0/token";
 
@@ -123,4 +172,6 @@ public class AzureUploader {
             throw new InvalidTokenException("Failed to parse Azure token response: " + e.getMessage());
         }
     }
+
+
 }

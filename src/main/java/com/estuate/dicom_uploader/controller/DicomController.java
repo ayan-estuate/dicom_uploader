@@ -18,50 +18,80 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/dicom")
-@RequiredArgsConstructor // This creates a constructor with required (final) fields
-@Validated // Enables validation on incoming request data
-@Slf4j // Enables logging (you can use log.info(), log.error(), etc.)
+@RequiredArgsConstructor
+@Validated
+@Slf4j
 public class DicomController {
 
-    // This handles job creation and job status logic
     private final JobQueueManager jobQueueManager;
 
-    // List of platforms we currently support
     private static final Set<String> SUPPORTED_PLATFORMS = Set.of("gcp", "azure");
+    private static final Set<String> SUPPORTED_STORAGE_TYPES = Set.of("native", "blob");
 
-    // This endpoint handles POST requests to /dicom/upload
     @PostMapping("/upload")
     public ResponseEntity<UploadResponse> uploadDicom(@RequestBody @Valid UploadRequest request) throws IOException {
-        // Convert platform name to lowercase (so GCP and gcp are treated the same)
-        String platformLower = request.platform().toLowerCase();
+        String platform = request.getPlatform().toLowerCase();
+        String storageType = request.getStorageType().toLowerCase();
 
-        // If the platform is not supported (like aws or some other), return error
-        if (!SUPPORTED_PLATFORMS.contains(platformLower)) {
+        if (!SUPPORTED_PLATFORMS.contains(platform)) {
             return ResponseEntity.badRequest()
-                    .body(new UploadResponse("error", "Unsupported platform: " + request.platform(), null));
+                    .body(new UploadResponse("error", "Unsupported platform: " + request.getPlatform(), null));
         }
 
-        // Create and save a new job using the JobQueueManager
-        Job job = jobQueueManager.enqueueJob(request.objectKey(), platformLower);
+        if (!SUPPORTED_STORAGE_TYPES.contains(storageType)) {
+            return ResponseEntity.badRequest()
+                    .body(new UploadResponse("error", "Unsupported storage type: " + request.getStorageType(), null));
+        }
 
-        // Return a success response with job ID
+        // Use switch expression with pattern matching-style branching
+        switch (storageType) {
+            case "native" -> {
+//                if (request.getDatasetName() == null || request.getDicomStoreName() == null) {
+//                    return ResponseEntity.badRequest()
+//                            .body(new UploadResponse("error", "Missing datasetName or dicomStoreName for native storage", null));
+//                }
+                log.info("Validated native storage for platform: {}", platform);
+            }
+            case "blob" -> {
+                switch (platform) {
+                    case "gcp" -> {
+                        if (request.getBucketName() == null || request.getBlobPath() == null) {
+                            return ResponseEntity.badRequest()
+                                    .body(new UploadResponse("error", "Missing bucketName or blobPath for GCP blob storage", null));
+                        }
+                    }
+                    case "azure" -> {
+//                        if (request.getBlobContainer() == null || request.getBlobPath() == null) {
+//                            return ResponseEntity.badRequest()
+//                                    .body(new UploadResponse("error", "Missing blobContainer or blobPath for Azure blob storage", null));
+//                        }
+                    }
+                    default -> {
+                        return ResponseEntity.badRequest()
+                                .body(new UploadResponse("error", "Unsupported platform for blob storage: " + platform, null));
+                    }
+                }
+                log.info("Validated blob storage for platform: {}", platform);
+            }
+            default -> {
+                return ResponseEntity.badRequest()
+                        .body(new UploadResponse("error", "Unhandled storage type: " + storageType, null));
+            }
+        }
+
+        Job job = jobQueueManager.enqueueJob(request);
         return ResponseEntity.ok(new UploadResponse("success", "Job queued", job.getJobId()));
     }
 
-    // This endpoint handles GET requests to /dicom/status?jobId=xyz
-    // It checks the job status for the given jobId
+
     @GetMapping("/status")
-    public ResponseEntity<?> getJobStatus(@RequestParam String jobId) throws IOException {
-        // Loop through all possible job statuses (QUEUED, PROCESSING, etc.)
+    public ResponseEntity<?> getJobStatus(@RequestParam @NotBlank String jobId) throws IOException {
         for (JobStatus status : JobStatus.values()) {
-            // Try to find the job with that status and jobId
             Job job = jobQueueManager.getJob(status, jobId);
             if (job != null) {
-                // If found, return the job details
                 return ResponseEntity.ok(job);
             }
         }
-        // If not found in any status, return 404 (not found)
         return ResponseEntity.notFound().build();
     }
 }

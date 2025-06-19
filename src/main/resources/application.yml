@@ -26,3 +26,5 @@ azure:
   dicom-web-url: ${AZURE_DICOM_WEB_URL}
   dicom-endpoint: "https://dicomworkspaceeastus.dicom.azurehealthcareapis.com"
   sas-url: "https://dicomarchive123.blob.core.windows.net/dicom-archive?sv=2024-11-04&ss=b&srt=o&sp=wctfx&se=2026-06-05T19:33:32Z&st=2025-06-05T11:33:32Z&spr=https&sig=ehv1U421GD7fQdQWifN8zUOnMQrpg4T%2FXLHXXz3EZRw%3D"
+  blob:
+    connection-string: ${AZURE_BLOB_CONNECTION_STRING}

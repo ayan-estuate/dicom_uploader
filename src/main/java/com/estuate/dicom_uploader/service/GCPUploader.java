@@ -1,11 +1,12 @@
 package com.estuate.dicom_uploader.service;
 
-
 import com.estuate.dicom_uploader.config.GCPConfig;
 import com.estuate.dicom_uploader.exception.DicomConflictException;
 import com.estuate.dicom_uploader.exception.DicomUploadException;
+import com.estuate.dicom_uploader.model.Job;
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.concurrent.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,10 +33,10 @@ public class GCPUploader {
 
     private final GCPConfig config;
 
-    public void uploadToGCP(byte[] dicomData) throws IOException {
+    public void uploadToGCP(byte[] dicomData, Job job) throws IOException {
         String dicomUri = String.format(
                 "https://healthcare.googleapis.com/v1/projects/%s/locations/%s/datasets/%s/dicomStores/%s/dicomWeb/studies",
-                config.getProjectId(), config.getRegion(), config.getDataset(), config.getDicomStore());
+                config.getProjectId(), config.getRegion(), job.getDatasetName(), job.getDicomStoreName());
 
         String accessToken = getAccessToken();
 
@@ -41,37 +44,87 @@ public class GCPUploader {
         post.setHeader("Authorization", "Bearer " + accessToken);
         post.setHeader("Content-Type", "application/dicom");
         post.setEntity(new ByteArrayEntity(dicomData, ContentType.create("application/dicom")));
-        log.info("before job:{}",System.currentTimeMillis());
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
 
-             CloseableHttpResponse response =  httpClient.execute(post)) {
-            log.info("Uploading DICOM to GCP: {}", dicomUri);
+        log.info("Uploading to GCP Healthcare API: {}", dicomUri);
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(post)) {
+
             int statusCode = response.getCode();
 
             if (statusCode == 409) {
                 String sopInstanceUID = null;
                 String studyUID = null;
                 String seriesUID = null;
+
                 try (DicomInputStream dis = new DicomInputStream(new ByteArrayInputStream(dicomData))) {
                     Attributes attr = dis.readDataset(-1, -1);
                     sopInstanceUID = attr.getString(Tag.SOPInstanceUID);
                     studyUID = attr.getString(Tag.StudyInstanceUID);
                     seriesUID = attr.getString(Tag.SeriesInstanceUID);
                 } catch (Exception e) {
-                    log.warn("Could not extract UIDs from DICOM for conflict analysis", e);
+                    log.warn("Failed to extract UIDs from DICOM", e);
                 }
                 throw new DicomConflictException(sopInstanceUID, studyUID, seriesUID);
             }
 
             if (statusCode != 200 && statusCode != 202) {
-                throw new DicomUploadException("Unexpected response from GCP: HTTP " + statusCode);
+                throw new DicomUploadException("Unexpected response from GCP Healthcare API: HTTP " + statusCode);
             }
 
-            log.info("Successfully uploaded DICOM. HTTP {}", statusCode);
+            log.info("✅ Successfully uploaded to GCP Healthcare API: HTTP {}", statusCode);
 
         } catch (IOException ex) {
             throw new DicomUploadException("Failed to upload DICOM to GCP", ex);
         }
+    }
+
+    public void uploadToGCPBlob(byte[] fileData, Job job) throws IOException {
+        Storage storage = StorageOptions.newBuilder()
+                .setProjectId(config.getProjectId())
+                .setCredentials(GoogleCredentials.getApplicationDefault())
+                .build()
+                .getService();
+
+        log.info("Using GCP Project: {}", storage.getOptions().getProjectId());
+
+        String bucketName = job.getBucketName();
+        if (bucketName == null || bucketName.isBlank()) {
+            throw new IllegalArgumentException("Bucket name is required for GCP blob upload.");
+        }
+
+        Bucket bucket = safelyFetchBucket(storage, bucketName, 5, TimeUnit.SECONDS);
+        if (bucket == null) {
+            throw new IOException("Bucket '" + bucketName + "' not found. Ensure it's created manually in GCP.");
+        }
+
+        String fileName = Paths.get(job.getObjectKey()).getFileName().toString();
+        String blobPath = (job.getBlobPath() != null && !job.getBlobPath().isBlank())
+                ? job.getBlobPath().replaceAll("/+$", "") + "/" + fileName
+                : fileName;
+
+        BlobId blobId = BlobId.of(bucketName, blobPath);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
+                .setContentType("application/dicom")
+                .build();
+
+        storage.create(blobInfo, fileData);
+
+        log.info("✅ Uploaded DICOM to GCP Blob Storage at '{}'", blobPath);
+    }
+
+    private Bucket safelyFetchBucket(Storage storage, String bucketName, long timeout, TimeUnit unit) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            Future<Bucket> future = executor.submit(() -> storage.get(bucketName));
+            return future.get(timeout, unit);
+        } catch (TimeoutException te) {
+            log.error("❌ Timeout fetching bucket '{}'", bucketName);
+        } catch (Exception e) {
+            log.error("❌ Error fetching bucket '{}'", bucketName, e);
+        } finally {
+            executor.shutdownNow();
+        }
+        return null;
     }
 
     private String getAccessToken() throws IOException {

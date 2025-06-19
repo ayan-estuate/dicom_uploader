@@ -1,0 +1,1 @@
+{"jobId":"5691aab7-1f7c-4355-99af-18c84aa5cb03","objectKey":"DICOM2/dicom_00013659_019.dcm","platform":"azure","storageType":"blob","status":"COMPLETED","createdAt":"2025-06-19T10:32:23.082143100Z","updatedAt":"2025-06-19T10:32:37.589239600Z","datasetName":"my-dicom-dataset","dicomStoreName":"my-dicom-store","blobPath":"studies/2025/07/","blobContainer":"dicom-archive"}
