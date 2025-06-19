@@ -8,6 +8,8 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 import java.net.URL;
 import java.time.Duration;
 
@@ -35,6 +37,22 @@ public class S3PresignedUrlService {
                 .build();
 
         return presigner.presignGetObject(presignRequest).url();
+    }
+
+
+    public URL generatePresignedPutUrl(String objectKey) {
+        PutObjectRequest putRequest = PutObjectRequest.builder()
+                .bucket(bucket)
+                .key(objectKey)
+                .contentType("application/dicom")
+                .build();
+
+        PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
+                .putObjectRequest(putRequest)
+                .signatureDuration(Duration.ofMinutes(expirationMinutes))
+                .build();
+
+        return presigner.presignPutObject(presignRequest).url();
     }
 }
 
