@@ -1,4 +1,4 @@
-package com.estuate.dicom_uploader.service;
+package com.estuate.dicom_uploader.service.gcp;
 
 import com.estuate.dicom_uploader.config.GCPConfig;
 import com.estuate.dicom_uploader.exception.DicomConflictException;
@@ -29,7 +29,7 @@ import java.util.concurrent.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class GCPUploader {
+public class GCPUploaderService {
 
     private final GCPConfig config;
 

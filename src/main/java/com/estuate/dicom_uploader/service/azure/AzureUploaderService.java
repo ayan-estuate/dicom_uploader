@@ -1,4 +1,4 @@
-package com.estuate.dicom_uploader.service;
+package com.estuate.dicom_uploader.service.azure;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
@@ -35,13 +35,12 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @Slf4j
-public class AzureUploader {
+public class AzureUploaderService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AzureUploader.class);
+    private static final Logger logger = LoggerFactory.getLogger(AzureUploaderService.class);
 
     private final AzureConfig config;
     private final ObjectMapper mapper = new ObjectMapper();
@@ -49,7 +48,7 @@ public class AzureUploader {
     @Value("${azure.blob.connection-string}")
     private String connectionString;
 
-    public AzureUploader(AzureConfig config) {
+    public AzureUploaderService(AzureConfig config) {
         this.config = config;
     }
 

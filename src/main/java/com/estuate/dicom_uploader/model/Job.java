@@ -28,7 +28,7 @@ public class Job {
     private String dicomStoreName;
 
     //Retrieval-specific fields(gcp-native)
-    private String projectId;
+    private String gcpProjectId;
     private String location;
 
     // Retrieval-specific fields (optional, used for DICOM UIDs)`

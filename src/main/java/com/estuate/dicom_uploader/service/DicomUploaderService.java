@@ -1,6 +1,8 @@
 package com.estuate.dicom_uploader.service;
 
 import com.estuate.dicom_uploader.model.Job;
+import com.estuate.dicom_uploader.service.azure.AzureUploaderService;
+import com.estuate.dicom_uploader.service.gcp.GCPUploaderService;
 import com.estuate.dicom_uploader.util.DicomValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +21,8 @@ import java.io.IOException;
 @Slf4j
 public class DicomUploaderService {
 
-    private final GCPUploader gcpUploader;
-    private final AzureUploader azureUploader;
+    private final GCPUploaderService gcpUploaderService;
+    private final AzureUploaderService azureUploaderService;
 
     public void upload(String presignedUrl, Job job) throws IOException, ParseException {
         byte[] fileData = downloadFile(presignedUrl);
@@ -36,16 +38,16 @@ public class DicomUploaderService {
         switch (platform.toLowerCase()) {
             case "gcp" -> {
                 if ("blob".equalsIgnoreCase(storageType)) {
-                    gcpUploader.uploadToGCPBlob(fileData, job);
+                    gcpUploaderService.uploadToGCPBlob(fileData, job);
                 } else {
-                    gcpUploader.uploadToGCP(fileData, job);
+                    gcpUploaderService.uploadToGCP(fileData, job);
                 }
             }
             case "azure" -> {
                 if ("blob".equalsIgnoreCase(storageType)) {
-                    azureUploader.uploadToAzureBlob(fileData, job);
+                    azureUploaderService.uploadToAzureBlob(fileData, job);
                 } else {
-                    azureUploader.uploadToAzure(fileData, job);
+                    azureUploaderService.uploadToAzure(fileData, job);
                 }
             }
             default -> throw new IllegalArgumentException("Invalid platform: " + platform);

@@ -53,29 +53,11 @@ public class JobProcessor {
     private void processUploadJob(Job job) throws IOException, ParseException, DicomUploadException {
         String presignedUrl = presignedUrlService.generatePresignedUrl(job.getObjectKey()).toString();
         dicomUploaderService.upload(presignedUrl, job);
+        log.info("Upload job {} processed successfully", job.getJobId());
     }
 
     private void processRetrievalJob(Job job) {
-        String storageType = job.getStorageType().toLowerCase();
-
-        switch (storageType) {
-            case "native" -> dicomRetrievalService.retrieveGCPNativeAndUploadToS3(
-                    job.getProjectId(),
-                    job.getLocation(),
-                    job.getDatasetName(),
-                    job.getDicomStoreName(),
-                    job.getStudyUid(),
-                    job.getSeriesUid(),
-                    job.getInstanceUid(),
-                    job.getObjectKey()
-            );
-            case "blob" -> dicomRetrievalService.retrieveFromGCPBlobAndUploadToS3(
-                    job.getProjectId(),
-                    job.getBucketName(),
-                    job.getBlobPath(),
-                    job.getObjectKey()
-            );
-            default -> throw new IllegalArgumentException("Unsupported storage type for retrieval: " + storageType);
-        }
+        dicomRetrievalService.retrieveAndUpload(job);
+        log.info("Retrieval job {} processed successfully", job.getJobId());
     }
 }
