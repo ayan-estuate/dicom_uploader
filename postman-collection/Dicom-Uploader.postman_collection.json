@@ -1,0 +1,343 @@
+{
+	"info": {
+		"_postman_id": "f67f018c-96a0-45cc-9357-336b9ce5d721",
+		"name": "Dicom-Uploader",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42582169",
+		"_collection_link": "https://vna222.postman.co/workspace/VNA~91e6b708-0e98-4a95-853a-910bcf5956c6/collection/42582169-f67f018c-96a0-45cc-9357-336b9ce5d721?action=share&source=collection_link&creator=42582169"
+	},
+	"item": [
+		{
+			"name": "Upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"objectKey\": \"DICOM2/dicom_00013659_019.dcm\",\r\n  \"platform\": \"gcp\",\r\n  \"storageType\": \"native\",\r\n  \"datasetName\":\"my-dicom-dataset\",//for gcp native\r\n  \"dicomStoreName\":\"my-dicom-store\"//for gcp native\r\n//   \"bucketName\": \"gcp-blob-bucket-us\",//for gcp blob\r\n//   \"blobContainer\":\"dicom-archive\",//azure blob\r\n//   \"blobPath\": \"studies/2025/07/\"//common for azure and gcp\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/dicom/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dicom",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload_AZURE_Native",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"objectKey\": \"DICOM2/dicom_00013659_019.dcm\",\r\n  \"platform\": \"azure\",\r\n  \"storageType\": \"native\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/dicom/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dicom",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload_AZURE_Blob",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"objectKey\": \"DICOM2/dicom_00013659_019.dcm\",\r\n  \"platform\": \"azure\",\r\n  \"storageType\": \"blob\",\r\n  \"blobContainer\":\"dicom-archive\",//azure blob\r\n  \"blobPath\": \"studies/2025/07\"//common for azure and gcp\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/dicom/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dicom",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload_GCP_Native",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"objectKey\": \"DICOM2/dicom_00013659_019.dcm\",//from s3 bucket\r\n  \"platform\": \"gcp\",\r\n  \"storageType\": \"native\",\r\n  \"datasetName\":\"my-dicom-dataset\",//for gcp native\r\n  \"dicomStoreName\":\"my-dicom-store\"//for gcp native\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/dicom/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dicom",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload_GCP_Blob",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"objectKey\": \"DICOM2/dicom_00013659_019.dcm\",\r\n  \"platform\": \"gcp\",\r\n  \"storageType\": \"blob\",\r\n  \"bucketName\": \"gcp-blob-bucket-us\",//for gcp blob\r\n  \"blobPath\": \"studies/2025/07\"//common for azure and gcp\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/dicom/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dicom",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAzure(Native)-Direct API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSIsImtpZCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSJ9.eyJhdWQiOiJodHRwczovL2RpY29tLmhlYWx0aGNhcmVhcGlzLmF6dXJlLmNvbSIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzJmNDZmMDc0LTdlNDEtNDA4Ny05MTIxLTg1ZWU3YWM1MGQyOS8iLCJpYXQiOjE3NTAyNDM2NDgsIm5iZiI6MTc1MDI0MzY0OCwiZXhwIjoxNzUwMjQ3NTQ4LCJhaW8iOiJrMlJnWUppbFBXbWk2VzBIbjEzSDJRT2lXYnptQWdBPSIsImFwcGlkIjoiOGUwYWM0MmQtOWU4OS00MzBjLTllYmItMWU0NzVlMDk5Mjc5IiwiYXBwaWRhY3IiOiIxIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvMmY0NmYwNzQtN2U0MS00MDg3LTkxMjEtODVlZTdhYzUwZDI5LyIsImlkdHlwIjoiYXBwIiwib2lkIjoiODk4NGY4NDAtMzg2Yy00NTlkLTk0Y2EtY2I3OGM5MDIwNjNjIiwicmgiOiIxLkFVWUFkUEJHTDBGLWgwQ1JJWVh1ZXNVTktiOGw1M1hPWnVwTW01cGNUS3JsZnpPOEFBQkdBQS4iLCJzdWIiOiI4OTg0Zjg0MC0zODZjLTQ1OWQtOTRjYS1jYjc4YzkwMjA2M2MiLCJ0aWQiOiIyZjQ2ZjA3NC03ZTQxLTQwODctOTEyMS04NWVlN2FjNTBkMjkiLCJ1dGkiOiJVNjZGUm5wVUZFV214ZThZR1ZKVkFBIiwidmVyIjoiMS4wIiwieG1zX2Z0ZCI6IlRLUmREVmVaV0lYVXBYa0VWUHpVdXVoUF9SeDFNdTVRbGkxVFVfY2Z3SThCZFhOdWIzSjBhQzFrYzIxeiIsInhtc19pZHJlbCI6IjcgMjQiLCJ4bXNfcmQiOiIwLjQyTGxZQkppZEJNUzRXQVhFakRxLTlrMzhhYU96OW8tdzhOWHRGcGlnS0tjUWdMUzNRWWZfU0tUZkRlNVZ5Yzk2cG54SFNqS0lTU3dYX1Y1NmJtMFZ6NnpaOFg0ckhwYWJ3d0EifQ.N8GwdNLfxCFCdtGJVI0kh9s39XM5aXwCp3aRzmrP3XD9omKkmOYax3dRKz-qkDVdJDoISoW44oW-flDfId9CE_3O3-IxygSPQkTLCagi3xyrUAExssO7GKniQvSZGnZ0S1CQKzQ1HMk2YCY-z61l6DJV-hV8HBksV1hywvRCPelqSGNyg5TAzHQZ3jk71eoHO5_i_c-k2m8ph3uhgwiMZKAZE5TPi3TNpVMSQa_4xrm7ObWQJR4BPPIX5DFjYdorhxnNvKkboaFssXZF8zZHntAASR7NLCC-bzh56apvCj_AvnloZNM_wR8ji_zSL2F1MP2rOeVRcBm7E4Nsa-XGgw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://dicomworkspaceeastus-dicomserviceeastus.dicom.azurehealthcareapis.com/v1/partitions/default/studies/1.3.6.1.4.1.11129.5.5.190137684722192658825563236786319210870500/series/1.3.6.1.4.1.11129.5.5.137424488464079673094153160013557077147159/instances/1.3.6.1.4.1.11129.5.5.166464213123411798454010159008736232327346",
+					"protocol": "https",
+					"host": [
+						"dicomworkspaceeastus-dicomserviceeastus",
+						"dicom",
+						"azurehealthcareapis",
+						"com"
+					],
+					"path": [
+						"v1",
+						"partitions",
+						"default",
+						"studies",
+						"1.3.6.1.4.1.11129.5.5.190137684722192658825563236786319210870500",
+						"series",
+						"1.3.6.1.4.1.11129.5.5.137424488464079673094153160013557077147159",
+						"instances",
+						"1.3.6.1.4.1.11129.5.5.166464213123411798454010159008736232327346"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAzure(blob)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/dicom/blob?containerName=dicom-archive&blobName=studies/2025/07/dicom_00013659_019.dcm",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dicom",
+						"blob"
+					],
+					"query": [
+						{
+							"key": "containerName",
+							"value": "dicom-archive"
+						},
+						{
+							"key": "blobName",
+							"value": "studies/2025/07/dicom_00013659_019.dcm"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAzure(Native)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/dicom/native?studyUid=1.3.6.1.4.1.11129.5.5.190137684722192658825563236786319210870500&seriesUid=1.3.6.1.4.1.11129.5.5.137424488464079673094153160013557077147159&instanceUid=1.3.6.1.4.1.11129.5.5.166464213123411798454010159008736232327346",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dicom",
+						"native"
+					],
+					"query": [
+						{
+							"key": "studyUid",
+							"value": "1.3.6.1.4.1.11129.5.5.190137684722192658825563236786319210870500"
+						},
+						{
+							"key": "seriesUid",
+							"value": "1.3.6.1.4.1.11129.5.5.137424488464079673094153160013557077147159"
+						},
+						{
+							"key": "instanceUid",
+							"value": "1.3.6.1.4.1.11129.5.5.166464213123411798454010159008736232327346"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RetrievalGCP(Native)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"platform\":\"gcp\",\r\n    \"storageType\":\"native\",\r\n    \"projectId\": \"dicom-s3togcp\",\r\n    \"location\": \"us-central1\",\r\n    \"dataset\": \"my-dicom-dataset\",\r\n    \"dicomStore\": \"my-dicom-store\",\r\n    \"studyUid\": \"1.3.6.1.4.1.11129.5.5.190137684722192658825563236786319210870500\",\r\n    \"seriesUid\": \"1.3.6.1.4.1.11129.5.5.137424488464079673094153160013557077147159\",\r\n    \"instanceUid\": \"1.3.6.1.4.1.11129.5.5.166464213123411798454010159008736232327346\",\r\n    \"objectKey\": \"roundtrip/sample7.dcm\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/dicom/retrieve",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dicom",
+						"retrieve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RetrievalGCP(blob)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"platform\":\"gcp\",\r\n\"storageType\":\"blob\",\r\n\"projectId\": \"dicom-s3togcp\",\r\n\"bucket\": \"gcp-blob-bucket-us\",\r\n\"blobPath\": \"studies/2025/07/dicom_00013659_019.dcm\",\r\n\"objectKey\": \"roundtrip/sample5.dcm\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/dicom/retrieve",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dicom",
+						"retrieve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JOB_Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/dicom/status?jobId=d5c4a5bc-f52a-414e-8ec1-0603f89464d9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dicom",
+						"status"
+					],
+					"query": [
+						{
+							"key": "jobId",
+							"value": "d5c4a5bc-f52a-414e-8ec1-0603f89464d9"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
