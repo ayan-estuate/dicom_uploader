@@ -1,6 +1,7 @@
 package com.estuate.dicom_uploader.service;
 
 import com.estuate.dicom_uploader.config.GCPConfig;
+import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
 import lombok.RequiredArgsConstructor;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -16,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 
 @Service("GCP")
@@ -40,7 +42,7 @@ public class GCPRetriever implements CloudRetrievalStrategy {
 
         // ✅ Build HTTP GET with correct Accept header
         HttpGet get = new HttpGet(uri);
-        get.setHeader("Authorization", "Bearer " + token);
+        get.setHeader("Authorization", "Bearer " + getAccessToken());
         get.setHeader("Accept", "application/dicom; transfer-syntax=*");
 
         // ✅ Execute HTTP request
@@ -62,11 +64,23 @@ public class GCPRetriever implements CloudRetrievalStrategy {
             }
 
             // Timestamped filename for uniqueness
-            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
-            Path filePath = folderPath.resolve(String.format("%s_%s_%s_%s.dcm", studyUID, seriesUID, sopUID, timestamp));
+            //String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+            Path filePath = folderPath.resolve(String.format("%s_%s_%s.dcm", studyUID, seriesUID, sopUID));
             Files.write(filePath, data);
 
             return data;
         }
+    }
+
+
+    private String getAccessToken() throws IOException {
+        GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
+                .createScoped(Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
+        credentials.refreshIfExpired();
+        AccessToken token = credentials.getAccessToken();
+        if (token == null) {
+            throw new IOException("Failed to obtain access token");
+        }
+        return token.getTokenValue();
     }
 }
