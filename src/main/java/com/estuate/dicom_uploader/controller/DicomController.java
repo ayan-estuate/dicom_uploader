@@ -30,7 +30,7 @@ public class DicomController {
     private static final Set<String> SUPPORTED_PLATFORMS = Set.of("gcp", "azure");
 
     // This endpoint handles POST requests to /dicom/upload
-    @PostMapping("/upload")
+    @PostMapping("/nativeUpload")
     public ResponseEntity<UploadResponse> uploadDicom(@RequestBody @Valid UploadRequest request) throws IOException {
         // Convert platform name to lowercase (so GCP and gcp are treated the same)
         String platformLower = request.platform().toLowerCase();
