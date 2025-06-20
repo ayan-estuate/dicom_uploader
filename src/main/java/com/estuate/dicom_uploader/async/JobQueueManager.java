@@ -51,7 +51,7 @@ public class JobQueueManager {
                 .storageType(request.getStorageType())
                 .datasetName(request.getDataset())
                 .dicomStoreName(request.getDicomStore())
-                .projectId(request.getProjectId())
+                .gcpProjectId(request.getProjectId())
                 .location(request.getLocation())
                 .studyUid(request.getStudyUid())
                 .seriesUid(request.getSeriesUid())
