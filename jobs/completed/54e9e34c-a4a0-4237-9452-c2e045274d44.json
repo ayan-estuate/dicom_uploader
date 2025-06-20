@@ -1,1 +1,0 @@
-{"jobId":"54e9e34c-a4a0-4237-9452-c2e045274d44","jobType":"UPLOAD","objectKey":"DICOM2/dicom_00013659_019.dcm","platform":"gcp","storageType":"native","status":"COMPLETED","createdAt":"2025-06-19T17:31:06.147811Z","updatedAt":"2025-06-19T17:31:27.245259200Z","datasetName":"my-dicom-dataset","dicomStoreName":"my-dicom-store"}

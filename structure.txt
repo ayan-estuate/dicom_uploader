@@ -3,7 +3,6 @@ Volume serial number is 8691-F14F
 D:.
 |   .gitattributes
 |   .gitignore
-|   HELP.md
 |   mvnw
 |   mvnw.cmd
 |   pom.xml
@@ -25,120 +24,85 @@ D:.
 |           
 +---jobs
 |   +---completed
-|   |       7fcf1752-289e-41c0-9a2d-c6c185303e66.json
+|   |       a6638f46-ab50-47ac-8837-4bfae7e89787.json
+|   |       aa3f9fd9-d9bc-4584-bbb6-4f3ba9d036c5.json
+|   |       b2a716cc-58c9-4af7-ab73-2ee8984766a6.json
 |   |       bce80d2b-77d4-43ef-bfc3-2c276540a91b.json
 |   |       
-|   +---failed
-|   |       0fe28044-a429-4a98-848a-7bfcf76f4680.json
-|   |       
-|   +---in_progress
-|   \---queued
-+---src
-|   +---main
-|   |   +---java
-|   |   |   \---com
-|   |   |       \---estuate
-|   |   |           \---dicom_uploader
-|   |   |               |   DicomUploaderApplication.java
-|   |   |               |   
-|   |   |               +---async
-|   |   |               |       JobProcessor.java
-|   |   |               |       JobQueueManager.java
-|   |   |               |       JobScheduler.java
-|   |   |               |       
-|   |   |               +---config
-|   |   |               |       AWSs3Config.java
-|   |   |               |       AzureConfig.java
-|   |   |               |       GCPConfig.java
-|   |   |               |       JacksonConfig.java
-|   |   |               |       
-|   |   |               +---controller
-|   |   |               |       DicomController.java
-|   |   |               |       
-|   |   |               +---dto
-|   |   |               |       UploadRequest.java
-|   |   |               |       UploadResponse.java
-|   |   |               |       
-|   |   |               +---exception
-|   |   |               |       DicomConflictException.java
-|   |   |               |       DicomUploadException.java
-|   |   |               |       GlobalExceptionHandler.java
-|   |   |               |       InvalidTokenException.java
-|   |   |               |       UploadFailedException.java
-|   |   |               |       
-|   |   |               +---model
-|   |   |               |       ErrorResponse.java
-|   |   |               |       Job.java
-|   |   |               |       JobStatus.java
-|   |   |               |       
-|   |   |               +---service
-|   |   |               |       AzureUploader.java
-|   |   |               |       DicomUploaderService.java
-|   |   |               |       GCPUploader.java
-|   |   |               |       S3PresignedUrlService.java
-|   |   |               |       
-|   |   |               \---util
-|   |   |                       FileJobStore.java
-|   |   |                       
-|   |   \---resources
-|   |           application.yml
-|   |           
-|   \---test
-|       \---java
-|           \---com
-|               \---estuate
-|                   \---dicom_uploader
-|                           DicomUploaderApplicationTests.java
-|                           
-\---target
-    +---classes
-    |   |   application.yml
-    |   |   
-    |   \---com
-    |       \---estuate
-    |           \---dicom_uploader
-    |               |   DicomUploaderApplication.class
-    |               |   
-    |               +---async
-    |               |       JobProcessor.class
-    |               |       JobQueueManager.class
-    |               |       JobScheduler.class
-    |               |       
-    |               +---config
-    |               |       AWSs3Config.class
-    |               |       AzureConfig.class
-    |               |       GCPConfig.class
-    |               |       JacksonConfig.class
-    |               |       
-    |               +---controller
-    |               |       DicomController.class
-    |               |       
-    |               +---dto
-    |               |       UploadRequest.class
-    |               |       UploadResponse.class
-    |               |       
-    |               +---exception
-    |               |       DicomConflictException.class
-    |               |       DicomUploadException.class
-    |               |       GlobalExceptionHandler.class
-    |               |       InvalidTokenException.class
-    |               |       UploadFailedException.class
-    |               |       
-    |               +---model
-    |               |       ErrorResponse$ErrorResponseBuilder.class
-    |               |       ErrorResponse.class
-    |               |       Job$JobBuilder.class
-    |               |       Job.class
-    |               |       JobStatus.class
-    |               |       
-    |               +---service
-    |               |       AzureUploader.class
-    |               |       DicomUploaderService.class
-    |               |       GCPUploader.class
-    |               |       S3PresignedUrlService.class
-    |               |       
-    |               \---util
-    |                       FileJobStore.class
-    |                       
-    \---generated-sources
-        \---annotations
+|   \---failed
+|           d34eb195-3f59-471e-9aa4-f640e47c5680.json
+|           db043400-e92e-4871-94a1-726cfda112e9.json
+|           e2e40ec3-497b-437c-9052-589e84eb5a91.json
+|           
++---postman-collection
+|       Dicom-Uploader.postman_collection.json
+|       
+\---src
+    +---main
+    |   +---java
+    |   |   \---com
+    |   |       \---estuate
+    |   |           \---dicom_uploader
+    |   |               |   DicomUploaderApplication.java
+    |   |               |   
+    |   |               +---async
+    |   |               |       JobProcessor.java
+    |   |               |       JobQueueManager.java
+    |   |               |       JobScheduler.java
+    |   |               |       
+    |   |               +---config
+    |   |               |       AWSs3Config.java
+    |   |               |       AzureConfig.java
+    |   |               |       GCPConfig.java
+    |   |               |       JacksonConfig.java
+    |   |               |       
+    |   |               +---controller
+    |   |               |       DicomController.java
+    |   |               |       DicomDeleteController.java
+    |   |               |       DicomRetrievalController.java
+    |   |               |       
+    |   |               +---dto
+    |   |               |       DicomBlobRetrievalRequest.java
+    |   |               |       DicomRetrievalRequest.java
+    |   |               |       UploadRequest.java
+    |   |               |       UploadResponse.java
+    |   |               |       
+    |   |               +---exception
+    |   |               |       DicomConflictException.java
+    |   |               |       DicomUploadException.java
+    |   |               |       GlobalExceptionHandler.java
+    |   |               |       InvalidTokenException.java
+    |   |               |       UploadFailedException.java
+    |   |               |       
+    |   |               +---model
+    |   |               |       ErrorResponse.java
+    |   |               |       Job.java
+    |   |               |       JobStatus.java
+    |   |               |       JobType.java
+    |   |               |       
+    |   |               +---service
+    |   |               |   |   DicomRetrievalService.java
+    |   |               |   |   DicomUploaderService.java
+    |   |               |   |   S3PresignedUrlService.java
+    |   |               |   |   
+    |   |               |   +---azure
+    |   |               |   |       AzureUploaderService.java
+    |   |               |   |       
+    |   |               |   \---gcp
+    |   |               |           GCPRetrievalService.java
+    |   |               |           GCPUploaderService.java
+    |   |               |           
+    |   |               \---util
+    |   |                       DicomValidator.java
+    |   |                       FileJobStore.java
+    |   |                       
+    |   \---resources
+    |           application.yml
+    |           
+    \---test
+        \---java
+            \---com
+                \---estuate
+                    \---dicom_uploader
+                            DicomUploaderApplicationTests.java
+                            
