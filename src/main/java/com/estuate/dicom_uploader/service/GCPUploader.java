@@ -34,6 +34,17 @@ public class GCPUploader {
     private final GCPConfig config;
 
     public void uploadToGCP(byte[] dicomData, Job job) throws IOException {
+        // Extract UIDs and store in Job
+        try (DicomInputStream dis = new DicomInputStream(new ByteArrayInputStream(dicomData))) {
+            Attributes attr = dis.readDataset(-1, -1);
+            job.setInstanceUid(attr.getString(Tag.SOPInstanceUID));
+            job.setStudyUid(attr.getString(Tag.StudyInstanceUID));
+            job.setSeriesUid(attr.getString(Tag.SeriesInstanceUID));
+            log.info("Extracted DICOM UIDs — SOP: {}, Study: {}, Series: {}", job.getInstanceUid(), job.getStudyUid(), job.getSeriesUid());
+        } catch (Exception e) {
+            log.warn("⚠️ Failed to extract DICOM UIDs for job {}", job.getJobId(), e);
+        }
+
         String dicomUri = String.format(
                 "https://healthcare.googleapis.com/v1/projects/%s/locations/%s/datasets/%s/dicomStores/%s/dicomWeb/studies",
                 config.getProjectId(), config.getRegion(), job.getDatasetName(), job.getDicomStoreName());
@@ -52,19 +63,7 @@ public class GCPUploader {
             int statusCode = response.getCode();
 
             if (statusCode == 409) {
-                String sopInstanceUID = null;
-                String studyUID = null;
-                String seriesUID = null;
-
-                try (DicomInputStream dis = new DicomInputStream(new ByteArrayInputStream(dicomData))) {
-                    Attributes attr = dis.readDataset(-1, -1);
-                    sopInstanceUID = attr.getString(Tag.SOPInstanceUID);
-                    studyUID = attr.getString(Tag.StudyInstanceUID);
-                    seriesUID = attr.getString(Tag.SeriesInstanceUID);
-                } catch (Exception e) {
-                    log.warn("Failed to extract UIDs from DICOM", e);
-                }
-                throw new DicomConflictException(sopInstanceUID, studyUID, seriesUID);
+                throw new DicomConflictException(job.getInstanceUid(), job.getStudyUid(), job.getSeriesUid());
             }
 
             if (statusCode != 200 && statusCode != 202) {
@@ -77,6 +76,7 @@ public class GCPUploader {
             throw new DicomUploadException("Failed to upload DICOM to GCP", ex);
         }
     }
+
 
     public void uploadToGCPBlob(byte[] fileData, Job job) throws IOException {
         Storage storage = StorageOptions.newBuilder()

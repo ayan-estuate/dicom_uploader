@@ -45,7 +45,7 @@ public class DicomUploaderService {
                 if ("blob".equalsIgnoreCase(storageType)) {
                     azureUploader.uploadToAzureBlob(fileData, job);
                 } else {
-                    azureUploader.uploadToAzure(fileData);
+                    azureUploader.uploadToAzure(fileData, job);
                 }
             }
             default -> throw new IllegalArgumentException("Invalid platform: " + platform);

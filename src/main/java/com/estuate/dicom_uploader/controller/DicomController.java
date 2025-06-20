@@ -1,6 +1,7 @@
 package com.estuate.dicom_uploader.controller;
 
 import com.estuate.dicom_uploader.async.JobQueueManager;
+import com.estuate.dicom_uploader.dto.DicomRetrievalRequest;
 import com.estuate.dicom_uploader.dto.UploadRequest;
 import com.estuate.dicom_uploader.dto.UploadResponse;
 import com.estuate.dicom_uploader.model.Job;
@@ -79,10 +80,50 @@ public class DicomController {
             }
         }
 
-        Job job = jobQueueManager.enqueueJob(request);
+        Job job = jobQueueManager.enqueueUploadJob(request);
         return ResponseEntity.ok(new UploadResponse("success", "Job queued", job.getJobId()));
     }
 
+    @PostMapping("/retrieve")
+    public ResponseEntity<UploadResponse> retrieveDicom(@RequestBody @Valid DicomRetrievalRequest request) throws IOException {
+        String platform = request.getPlatform().toLowerCase();
+        String storageType = request.getStorageType().toLowerCase();
+
+        if (!SUPPORTED_PLATFORMS.contains(platform)) {
+            return ResponseEntity.badRequest()
+                    .body(new UploadResponse("error", "Unsupported platform: " + request.getPlatform(), null));
+        }
+
+        if (!SUPPORTED_STORAGE_TYPES.contains(storageType)) {
+            return ResponseEntity.badRequest()
+                    .body(new UploadResponse("error", "Unsupported storage type: " + request.getStorageType(), null));
+        }
+
+        switch (storageType) {
+            case "native" -> {
+                if (request.getDataset() == null || request.getDicomStore() == null ||
+                        request.getStudyUid() == null || request.getSeriesUid() == null || request.getInstanceUid() == null) {
+                    return ResponseEntity.badRequest()
+                            .body(new UploadResponse("error", "Missing required fields for native retrieval", null));
+                }
+                log.info("Validated native retrieval for platform: {}", platform);
+            }
+            case "blob" -> {
+                if (request.getBucket() == null || request.getBlobPath() == null) {
+                    return ResponseEntity.badRequest()
+                            .body(new UploadResponse("error", "Missing bucketName or blobPath for blob retrieval", null));
+                }
+                log.info("Validated blob retrieval for platform: {}", platform);
+            }
+            default -> {
+                return ResponseEntity.badRequest()
+                        .body(new UploadResponse("error", "Unhandled storage type: " + storageType, null));
+            }
+        }
+
+        Job job = jobQueueManager.enqueueRetrievalJob(request);
+        return ResponseEntity.ok(new UploadResponse("success", "Retrieval job queued", job.getJobId()));
+    }
 
     @GetMapping("/status")
     public ResponseEntity<?> getJobStatus(@RequestParam @NotBlank String jobId) throws IOException {

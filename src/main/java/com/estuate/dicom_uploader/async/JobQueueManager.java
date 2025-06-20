@@ -1,8 +1,10 @@
 package com.estuate.dicom_uploader.async;
 
+import com.estuate.dicom_uploader.dto.DicomRetrievalRequest;
 import com.estuate.dicom_uploader.dto.UploadRequest;
 import com.estuate.dicom_uploader.model.Job;
 import com.estuate.dicom_uploader.model.JobStatus;
+import com.estuate.dicom_uploader.model.JobType;
 import com.estuate.dicom_uploader.util.FileJobStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,9 +21,10 @@ public class JobQueueManager {
     // This helper class handles reading and writing job files
     private final FileJobStore jobStore;
 
-    public Job enqueueJob(UploadRequest request) throws IOException {
+    public Job enqueueUploadJob(UploadRequest request) throws IOException {
         Job job = Job.builder()
                 .jobId(UUID.randomUUID().toString())
+                .jobType(JobType.UPLOAD)
                 .objectKey(request.getObjectKey())
                 .platform(request.getPlatform())
                 .storageType(request.getStorageType())
@@ -39,7 +42,30 @@ public class JobQueueManager {
         return job;
     }
 
+    public Job enqueueRetrievalJob(DicomRetrievalRequest request) throws IOException {
+        Job job = Job.builder()
+                .jobId(UUID.randomUUID().toString())
+                .jobType(JobType.RETRIEVAL)
+                .objectKey(request.getObjectKey())
+                .platform(request.getPlatform())
+                .storageType(request.getStorageType())
+                .datasetName(request.getDataset())
+                .dicomStoreName(request.getDicomStore())
+                .projectId(request.getProjectId())
+                .location(request.getLocation())
+                .studyUid(request.getStudyUid())
+                .seriesUid(request.getSeriesUid())
+                .instanceUid(request.getInstanceUid())
+                .bucketName(request.getBucket())
+                .blobPath(request.getBlobPath())
+                .status(JobStatus.QUEUED)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
 
+        jobStore.saveJob(job);
+        return job;
+    }
     /**
      * This method returns all the jobs that are currently in the QUEUED state.
      *

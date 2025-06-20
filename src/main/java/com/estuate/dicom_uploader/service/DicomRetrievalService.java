@@ -26,7 +26,7 @@ public class DicomRetrievalService {
 
     private final S3PresignedUrlService s3PresignedUrlService;
 
-    public void retrieveAndUploadToS3(String projectId, String location, String dataset,
+    public void retrieveGCPNativeAndUploadToS3(String projectId, String location, String dataset,
                                       String dicomStore, String studyUid, String seriesUid, String instanceUid,
                                       String objectKey) {
 
@@ -51,14 +51,14 @@ public class DicomRetrievalService {
             uploadToS3ViaPresignedUrl(putUrl, dicomBytes);
 
             // Step 3: Log
-            log.info("📌 Retrieved DICOM Study UID: {}", studyUid);
-            log.info("📦 Uploaded to S3 key: {}", objectKey);
+            log.info("Retrieved DICOM Study UID: {}", studyUid);
+            log.info("Uploaded to S3 key: {}", objectKey);
 
             // Step 4: Delete from GCP after successful upload
             deleteFromGCP(projectId, location, dataset, dicomStore, studyUid, seriesUid, instanceUid, token);
 
         } catch (Exception e) {
-            log.error("❌ Retrieval or S3 upload/delete failed", e);
+            log.error("Retrieval or S3 upload/delete failed", e);
             throw new RuntimeException("DICOM round-trip failed", e);
         }
     }
@@ -74,30 +74,30 @@ public class DicomRetrievalService {
 
             Blob blob = storage.get(BlobId.of(bucketName, blobName));
             if (blob == null || !blob.exists()) {
-                throw new IOException("❌ Blob not found in GCP: " + blobName);
+                throw new IOException("Blob not found in GCP: " + blobName);
             }
 
             byte[] data = blob.getContent();
-            log.info("✅ Retrieved blob from GCP Cloud Storage: gs://{}/{}", bucketName, blobName);
+            log.info("Retrieved blob from GCP Cloud Storage: gs://{}/{}", bucketName, blobName);
 
             // Step 2: Upload to S3 via presigned URL
             URL s3PutUrl = s3PresignedUrlService.generatePresignedPutUrl(s3ObjectKey);
             uploadToS3ViaPresignedUrl(s3PutUrl, data);
-            log.info("📦 Uploaded blob to S3 at key: {}", s3ObjectKey);
+            log.info("Uploaded blob to S3 at key: {}", s3ObjectKey);
 
             // Step 3: Log metadata
-            log.info("🧾 Roundtrip complete. Blob '{}' from bucket '{}' uploaded to S3 key '{}'", blobName, bucketName, s3ObjectKey);
+            log.info("Roundtrip complete. Blob '{}' from bucket '{}' uploaded to S3 key '{}'", blobName, bucketName, s3ObjectKey);
 
             // Step 4: Optional delete from GCP
             boolean deleted = storage.delete(BlobId.of(bucketName, blobName));
             if (deleted) {
-                log.info("🗑️ Deleted blob from GCP: {}", blobName);
+                log.info("🗑Deleted blob from GCP: {}", blobName);
             } else {
-                log.warn("⚠️ Failed to delete blob from GCP or it didn't exist: {}", blobName);
+                log.warn("Failed to delete blob from GCP or it didn't exist: {}", blobName);
             }
 
         } catch (Exception e) {
-            log.error("❌ Failed roundtrip from GCP Blob to S3", e);
+            log.error("Failed roundtrip from GCP Blob to S3", e);
             throw new RuntimeException("Blob roundtrip failed", e);
         }
     }
@@ -115,7 +115,7 @@ public class DicomRetrievalService {
                 throw new IOException("Failed to upload to S3 via presigned URL, HTTP status: " + status);
             }
 
-            log.info("✅ Uploaded to S3 using presigned PUT URL");
+            log.info("Uploaded to S3 using presigned PUT URL");
         }
     }
 
@@ -139,7 +139,7 @@ public class DicomRetrievalService {
                 throw new IOException("Failed to delete from GCP Healthcare API, HTTP status: " + status);
             }
 
-            log.info("🗑️ Successfully deleted instance from GCP DICOM store");
+            log.info("Successfully deleted instance from GCP DICOM store");
         }
     }
 

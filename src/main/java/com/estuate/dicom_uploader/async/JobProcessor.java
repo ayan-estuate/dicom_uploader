@@ -3,6 +3,8 @@ package com.estuate.dicom_uploader.async;
 import com.estuate.dicom_uploader.exception.DicomUploadException;
 import com.estuate.dicom_uploader.model.Job;
 import com.estuate.dicom_uploader.model.JobStatus;
+import com.estuate.dicom_uploader.model.JobType;
+import com.estuate.dicom_uploader.service.DicomRetrievalService;
 import com.estuate.dicom_uploader.service.DicomUploaderService;
 import com.estuate.dicom_uploader.service.S3PresignedUrlService;
 import lombok.RequiredArgsConstructor;
@@ -19,29 +21,61 @@ public class JobProcessor {
 
     private final JobQueueManager jobQueueManager;
     private final DicomUploaderService dicomUploaderService;
-    private final S3PresignedUrlService generatePresignedUrl;
+    private final S3PresignedUrlService presignedUrlService;
+    private final DicomRetrievalService dicomRetrievalService;
 
     public void processJob(Job job) {
         try {
             jobQueueManager.updateJobStatus(job, JobStatus.IN_PROGRESS);
 
-
-
-            String presignedUrl = generatePresignedUrl.generatePresignedUrl(job.getObjectKey()).toString();
-
-            dicomUploaderService.upload(presignedUrl, job);
+            if (job.getJobType() == JobType.UPLOAD) {
+                processUploadJob(job);
+            } else if (job.getJobType() == JobType.RETRIEVAL) {
+                processRetrievalJob(job);
+            } else {
+                throw new IllegalStateException("Unknown job type: " + job.getJobType());
+            }
 
             jobQueueManager.updateJobStatus(job, JobStatus.COMPLETED);
             log.info("Job {} completed successfully", job.getJobId());
 
-        } catch (IOException | ParseException | DicomUploadException e) {
+        } catch (Exception e) {
             log.error("Job {} failed: {}", job.getJobId(), e.getMessage(), e);
             try {
                 job.setErrorMessage(e.getMessage());
                 jobQueueManager.updateJobStatus(job, JobStatus.FAILED);
             } catch (IOException ioException) {
-                log.error("Failed to update job status to FAILED for job {}: {}", job.getJobId(), ioException.getMessage());
+                log.error("Failed to update status to FAILED for job {}: {}", job.getJobId(), ioException.getMessage());
             }
+        }
+    }
+
+    private void processUploadJob(Job job) throws IOException, ParseException, DicomUploadException {
+        String presignedUrl = presignedUrlService.generatePresignedUrl(job.getObjectKey()).toString();
+        dicomUploaderService.upload(presignedUrl, job);
+    }
+
+    private void processRetrievalJob(Job job) {
+        String storageType = job.getStorageType().toLowerCase();
+
+        switch (storageType) {
+            case "native" -> dicomRetrievalService.retrieveGCPNativeAndUploadToS3(
+                    job.getProjectId(),
+                    job.getLocation(),
+                    job.getDatasetName(),
+                    job.getDicomStoreName(),
+                    job.getStudyUid(),
+                    job.getSeriesUid(),
+                    job.getInstanceUid(),
+                    job.getObjectKey()
+            );
+            case "blob" -> dicomRetrievalService.retrieveFromGCPBlobAndUploadToS3(
+                    job.getProjectId(),
+                    job.getBucketName(),
+                    job.getBlobPath(),
+                    job.getObjectKey()
+            );
+            default -> throw new IllegalArgumentException("Unsupported storage type for retrieval: " + storageType);
         }
     }
 }

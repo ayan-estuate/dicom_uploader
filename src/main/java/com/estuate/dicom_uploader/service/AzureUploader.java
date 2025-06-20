@@ -53,7 +53,19 @@ public class AzureUploader {
         this.config = config;
     }
 
-    public void uploadToAzure(byte[] dicomData) throws IOException {
+    public void uploadToAzure(byte[] dicomData, Job job) throws IOException {
+        // Extract UIDs before upload attempt
+        try (DicomInputStream dis = new DicomInputStream(new ByteArrayInputStream(dicomData))) {
+            Attributes attr = dis.readDataset(-1, -1);
+            job.setInstanceUid(attr.getString(Tag.SOPInstanceUID));
+            job.setStudyUid(attr.getString(Tag.StudyInstanceUID));
+            job.setSeriesUid(attr.getString(Tag.SeriesInstanceUID));
+            logger.info("Extracted DICOM UIDs — SOP: {}, Study: {}, Series: {}",
+                    job.getInstanceUid(), job.getStudyUid(), job.getSeriesUid());
+        } catch (Exception e) {
+            logger.warn("⚠️ Failed to extract DICOM UIDs before Azure upload", e);
+        }
+
         String url = config.getDicomEndpoint() + "/v1/partitions/default/studies";
         logger.info("Uploading DICOM to Azure at URL: {}", url);
 
@@ -72,32 +84,20 @@ public class AzureUploader {
             logger.info("Azure upload response: HTTP {}, Body: {}", statusCode, responseBody);
 
             if (statusCode == 409) {
-                String sopInstanceUID = null;
-                String studyUID = null;
-                String seriesUID = null;
-
-                try (DicomInputStream dis = new DicomInputStream(new ByteArrayInputStream(dicomData))) {
-                    Attributes attr = dis.readDataset(-1, -1);
-                    sopInstanceUID = attr.getString(Tag.SOPInstanceUID);
-                    studyUID = attr.getString(Tag.StudyInstanceUID);
-                    seriesUID = attr.getString(Tag.SeriesInstanceUID);
-                } catch (Exception e) {
-                    logger.warn("Could not extract UIDs for conflict log", e);
-                }
-
-                throw new DicomConflictException(sopInstanceUID, studyUID, seriesUID);
+                throw new DicomConflictException(job.getInstanceUid(), job.getStudyUid(), job.getSeriesUid());
             }
 
             if (statusCode < 200 || statusCode >= 300) {
                 throw new UploadFailedException("Azure upload failed. HTTP Status: " + statusCode + ", Body: " + responseBody);
             }
 
-            logger.info("Successfully uploaded DICOM to Azure. Status: {}", statusCode);
+            logger.info("✅ Successfully uploaded DICOM to Azure. Status: {}", statusCode);
 
         } catch (IOException | ParseException e) {
             throw new UploadFailedException("IOException during Azure upload: " + e.getMessage());
         }
     }
+
 
     public void uploadToAzureBlob(byte[] fileData, Job job) throws IOException {
         try {

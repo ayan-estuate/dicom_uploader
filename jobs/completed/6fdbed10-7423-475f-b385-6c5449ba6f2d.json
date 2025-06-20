@@ -1,0 +1,1 @@
+{"jobId":"6fdbed10-7423-475f-b385-6c5449ba6f2d","jobType":"RETRIEVAL","objectKey":"roundtrip/sample5.dcm","platform":"gcp","storageType":"blob","status":"COMPLETED","createdAt":"2025-06-19T17:45:31.767689800Z","updatedAt":"2025-06-19T17:45:46.333928300Z","projectId":"dicom-s3togcp","bucketName":"gcp-blob-bucket-us","blobPath":"studies/2025/07/dicom_00013659_019.dcm"}

@@ -1,1 +1,0 @@
-{"jobId":"3809b068-ac3b-49cb-b94e-809d781985f0","objectKey":"DICOM2/dicom_00013659_019.dcm","platform":"gcp","storageType":"blob","status":"IN_PROGRESS","createdAt":"2025-06-19T06:32:32.121538500Z","updatedAt":"2025-06-19T06:32:33.006570700Z","bucketName":"gcp-blob-bucket","blobPath":"studies/2025/06/"}
