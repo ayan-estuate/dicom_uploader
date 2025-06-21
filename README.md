@@ -1,45 +1,65 @@
-# DICOM Uploader Service
 
-A modern, asynchronous Spring Boot microservice for uploading DICOM files from AWS S3 to cloud platforms (Azure or GCP). The service queues jobs, persists metadata locally, and supports job tracking.
+# 🏥 DICOM Uploader Microservice
 
----
-
-## 🚀 Features
-
-- ✅ Asynchronous upload of DICOM files
-- ✅ Platform support: **GCP** and **Azure**
-- ✅ AWS S3 integration using presigned URLs
-- ✅ Job queueing with local persistence (file-based)
-- ✅ Job tracking via REST API
-- ✅ Structured logging with SLF4J
-- ✅ Jackson integration for modern Java (JDK 21+) with full `Instant` support
-- ✅ Industry-grade folder structure & exception handling
+A modern, **asynchronous**, **cloud-agnostic** Spring Boot service for **uploading and retrieving DICOM files** from various cloud storage platforms (AWS S3, Azure Blob, GCP Storage, and native GCP DICOM Store). The system ensures **high-performance**, **non-blocking job processing**, **platform-based delegation**, and **robust local job status tracking**.
 
 ---
 
-## 📁 Project Structure
+## 🚀 Key Features
 
+- ✅ Asynchronous job queue with scheduled background processing (non-blocking)
+- ✅ Supports uploads via:
+  - **AWS S3 presigned URLs**
+  - **Azure Blob Storage**
+  - **GCP Cloud Storage**
+- ✅ Supports native retrieval via **GCP Healthcare DICOM API**
+- ✅ Multi-cloud platform delegation via **Factory Pattern**
+- ✅ Job persistence and tracking using **local filesystem-based JSON files**
+- ✅ Job lifecycle visibility with REST endpoints (`QUEUED`, `IN_PROGRESS`, `COMPLETED`, `FAILED`)
+- ✅ Structured and centralized error handling
+- ✅ Fully decoupled **service-oriented architecture**
+- ✅ Clean modular folder structure and logging
+- ✅ Support for large file handling (via streaming uploads)
+- ✅ Designed with **industry-grade async patterns** using Spring's `@Async` and scheduler
+
+---
+
+## 📦 Tech Stack
+
+| Layer | Tech |
+|------|------|
+| Language | **Java 21** |
+| Framework | **Spring Boot 3+** |
+| HTTP | **Apache HttpComponents 5+** |
+| Logging | **SLF4J + Logback** |
+| JSON & Dates | **Jackson + JSR310 (Instant)** |
+| Cloud | **AWS SDK v2**, **Azure SDK**, **Google Cloud Healthcare API** |
+| Tools | **Lombok**, **OpenAPI**, **Postman** |
+
+---
+
+## 🗂️ Architecture Overview
+
+![Alt Text](https://raw.githubusercontent.com/latecoder10/nDP_VNA/refs/heads/master/nDP_v1.svg)
+
+---
+## 🗂️ Folder Structure
 ```sql
 +---jobs
 |   +---completed
-|   |       3a37950b-49e5-4474-925d-eb367fe275f4.json
-|   |       4b064e17-eef5-49c9-9953-3d56edf665d2.json
-|   |       5da37287-00cb-4d63-8421-15864829745a.json
-|   |       65ccbd97-5003-4056-bbd6-34c7f6f0e668.json
-|   |       6aec6da2-b687-48fd-92fc-bc6458517dc5.json
-|   |       81746844-c6b6-4c03-be66-e8a31f135865.json
-|   |       820a361b-614d-4907-a2fd-841a6ca329a3.json
-|   |       e3f15dda-ca90-4117-9ffa-5c85f0a1ddfa.json
+|   |       b2a716cc-58c9-4af7-ab73-2ee8984766a6.json
+|   |       bce80d2b-77d4-43ef-bfc3-2c276540a91b.json
+|   |       d4761015-84b0-414e-ae64-52cc88107d0d.json
 |   |       
 |   +---failed
-|   |       13cb57a0-b419-418c-9c57-724f44c0bb75.json
-|   |       6d733033-509b-47d2-82a6-31058f62575e.json
-|   |       8fd92524-2a3d-4ed7-933f-eb739445c660.json
-|   |       91047830-caf8-49e9-90db-0401a8e03efa.json
-|   |       fa388de9-2a9a-4cf4-970e-4f1c3c38fe61.json
+|   |       ee2fcd59-1361-4bb4-9d9a-f25645388e7b.json
+|   |       f492b6cb-d7fb-41e3-9c50-220ec8675286.json
 |   |       
 |   +---in_progress
 |   \---queued
++---postman-collection
+|       Dicom-Uploader.postman_collection.json
+|       
 +---src
 |   +---main
 |   |   +---java
@@ -54,6 +74,7 @@ A modern, asynchronous Spring Boot microservice for uploading DICOM files from A
 |   |   |               |       JobScheduler.java
 |   |   |               |       
 |   |   |               +---config
+|   |   |               |       AsyncConfig.java
 |   |   |               |       AWSs3Config.java
 |   |   |               |       AzureConfig.java
 |   |   |               |       GCPConfig.java
@@ -61,6 +82,13 @@ A modern, asynchronous Spring Boot microservice for uploading DICOM files from A
 |   |   |               |       
 |   |   |               +---controller
 |   |   |               |       DicomController.java
+|   |   |               |       DicomDeleteController.java
+|   |   |               |       
+|   |   |               +---dto
+|   |   |               |       DicomBlobRetrievalRequest.java
+|   |   |               |       DicomRetrievalRequest.java
+|   |   |               |       UploadRequest.java
+|   |   |               |       UploadResponse.java
 |   |   |               |       
 |   |   |               +---exception
 |   |   |               |       DicomConflictException.java
@@ -73,60 +101,56 @@ A modern, asynchronous Spring Boot microservice for uploading DICOM files from A
 |   |   |               |       ErrorResponse.java
 |   |   |               |       Job.java
 |   |   |               |       JobStatus.java
+|   |   |               |       JobType.java
 |   |   |               |       
 |   |   |               +---service
-|   |   |               |       AzureUploader.java
-|   |   |               |       DicomUploaderService.java
-|   |   |               |       GCPUploader.java
-|   |   |               |       S3PresignedUrlService.java
-|   |   |               |       
+|   |   |               |   |   CloudUploaderFactory.java
+|   |   |               |   |   DicomRetrievalService.java
+|   |   |               |   |   DownloaderService.java
+|   |   |               |   |   S3PresignedUrlService.java
+|   |   |               |   |   UploadOrchestratorService.java
+|   |   |               |   |   
+|   |   |               |   +---azure
+|   |   |               |   |       AzureUploaderService.java
+|   |   |               |   |       
+|   |   |               |   +---gcp
+|   |   |               |   |       GCPRetrievalService.java
+|   |   |               |   |       GCPUploaderService.java
+|   |   |               |   |       
+|   |   |               |   \---uploader
+|   |   |               |       |   CloudUploader.java
+|   |   |               |       |   
+|   |   |               |       \---impl
+|   |   |               |               AzureUploader.java
+|   |   |               |               BlobUploaderAzure.java
+|   |   |               |               BlobUploaderGCP.java
+|   |   |               |               GCPUploader.java
+|   |   |               |               
 |   |   |               \---util
+|   |   |                       DicomValidator.java
 |   |   |                       FileJobStore.java
 |   |   |                       
 |   |   \---resources
 |   |           application.yml
 |   |           
-|   \---test
-|       \---java
-|           \---com
-|               \---estuate
-|                   \---dicom_uploader
-|                           DicomUploaderApplicationTests.java
-|           
+
 ```
-
-
-
-
-## 📦 Tech Stack
-
-- **Java 21**
-- **Spring Boot 3+**
-- **Jackson Databind + jsr310**
-- **AWS SDK (v2)** for presigned URL generation
-- **Apache HTTP Components** for file uploads
-- **Lombok** for cleaner POJOs
-- **SLF4J + Logback** for structured logging
-
----
 
 ## ⚙️ Setup Instructions
 
-### 1. Clone the Repo
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/your-org/dicom-uploader.git
 cd dicom-uploader
 ```
-### 2. Set AWS Credentials
-```bash
-Make sure your environment has access to AWS (via ~/.aws/credentials, environment variables, or EC2 role).
-```
-### 3. Configure application.yml or application.properties
-**Note:**
-Add your S3 bucket and Azure/GCP credentials if needed.
+
+### 2. Configure Your Cloud Credentials
+
+Edit `application.yml` or `application.properties`:
 
 ```yaml
 aws:
+  region: us-east-1
   s3:
     bucket-name: your-dicom-bucket
 
@@ -137,56 +161,128 @@ azure:
   client-secret: your-client-secret
   scope: https://healthcareapis.azure.com/.default
 
+gcp:
+  project-id: your-gcp-project
+  region: your-gcp-region
+  dataset: your-dataset
+  dicom-store: your-dicom-store
 ```
 
-**Note:-** For GCP, use standard Application Default Credentials.
+> 📝 For GCP, ensure your service account or local environment is authenticated using `GOOGLE_APPLICATION_CREDENTIALS`.
 
-### 4. Build the Project
+### 3. Build and Run the Project
 ```bash
 ./mvnw clean install
 java -jar target/dicom-uploader-0.0.1-SNAPSHOT.jar
-
 ```
 
-## 🧪 API Endpoints
-### 📤 Queue a DICOM Upload
+---
+
+## 🔌 API Endpoints
+
+### 📤 Upload DICOM File (Async)
 ```http
 POST /dicom/upload
 Content-Type: application/json
 
 {
-  "objectKey": "path/to/dicom/file.dcm",
-  "platform": "azure" // or "gcp"
+  "objectKey": "path/to/file.dcm",
+  "platform": "azure" // or "gcp", "s3"
 }
 ```
-**Response:**
+
+**Response**
 ```json
 {
   "status": "success",
   "message": "Job queued",
-  "jobId": "65ccbd97-5003-4056-bbd6-34c7f6f0e668"
+  "jobId": "bce80d2b-77d4-43ef-bfc3-2c276540a91b"
 }
-
 ```
+
+---
+
+### 📥 Retrieve DICOM File from GCP
+```http
+POST /dicom/retrieve
+Content-Type: application/json
+
+{
+  "studyInstanceUID": "1.2.840.113619...",
+  "seriesInstanceUID": "...",
+  "sopInstanceUID": "..."
+}
+```
+
+---
+
+### ❌ Delete a Local DICOM Job (from filesystem)
+```http
+DELETE /dicom/delete?jobId=<jobId>
+```
+
+---
+
 ### 🔍 Check Job Status
-        
 ```http
 GET /dicom/status/{jobId}
 ```
-**Response:**
+
+**Response**
 ```json
 {
-"jobId": "65ccbd97-5003-4056-bbd6-34c7f6f0e668",
-"status": "COMPLETED",
-"platform": "azure",
-"createdAt": "2025-06-09T10:22:33Z",
-"updatedAt": "2025-06-09T10:23:01Z"
+  "jobId": "bce80d2b-77d4-43ef-bfc3-2c276540a91b",
+  "status": "COMPLETED",
+  "platform": "azure",
+  "createdAt": "2025-06-09T10:22:33Z",
+  "updatedAt": "2025-06-09T10:23:01Z"
 }
-
 ```
 
-## 💼 Job Status Lifecycle
+---
+
+## 📊 Job Lifecycle
 
 ```text
-QUEUED ➝ IN_PROGRESS ➝ COMPLETED / FAILED
+QUEUED → IN_PROGRESS → COMPLETED / FAILED
 ```
+
+Each stage corresponds to a file saved under:
+```bash
+/jobs/queued/
+       in_progress/
+       completed/
+       failed/
+```
+
+---
+
+## 📜 Logging & Monitoring
+
+- Uses **SLF4J + Logback**
+- Async flow logs job IDs, status, platform, timestamps
+- All job events are persisted as `.json` in `/jobs/<status>/` folder
+
+---
+
+## 🧩 Future Enhancements (Pluggable Roadmap)
+
+- [ ] Native Azure DICOM API retrieval
+- [ ] Retry mechanism for transient failures
+- [ ] Export logs in `.csv` for audit
+- [ ] JWT/OAuth2-based API security
+- [ ] UI Dashboard for job monitoring
+
+---
+
+## 👨‍💻 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request with clear title and description
+
+---
+
+## 📜 License
+
+MIT License. © Estuate Inc.
