@@ -34,6 +34,7 @@ public class GCPRetrievalService {
                 projectId, location, dataset, dicomStore, studyUid, seriesUid, instanceUid
         );
 
+
         try {
             String token = getAccessToken();
 
