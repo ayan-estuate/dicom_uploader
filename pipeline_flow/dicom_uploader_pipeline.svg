@@ -1,0 +1,387 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2735pt" height="823pt" viewBox="0.00 0.00 2734.83 823.00">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 819)">
+<title>DICOMUploaderPipeline</title>
+<polygon fill="#ffffff" stroke="none" points="-4,4 -4,-819 2730.83,-819 2730.83,4 -4,4"/>
+<text text-anchor="start" x="1183.16" y="-792" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="20.00">DICOM Uploader Pipeline Architecture</text>
+<g id="clust1" class="cluster">
+<title>cluster_0</title>
+<path fill="#ffffff" stroke="#cccccc" stroke-dasharray="5,2" d="M53.87,-451C53.87,-451 261.93,-451 261.93,-451 267.93,-451 273.93,-457 273.93,-463 273.93,-463 273.93,-541 273.93,-541 273.93,-547 267.93,-553 261.93,-553 261.93,-553 53.87,-553 53.87,-553 47.87,-553 41.87,-547 41.87,-541 41.87,-541 41.87,-463 41.87,-463 41.87,-457 47.87,-451 53.87,-451"/>
+<text text-anchor="middle" x="157.9" y="-534.6" font-family="Helvetica,sans-Serif" font-size="16.00">Client Layer (API/UX Triggers)</text>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_1</title>
+<path fill="#ffffff" stroke="#90caf9" d="M437.52,-459C437.52,-459 644.71,-459 644.71,-459 650.71,-459 656.71,-465 656.71,-471 656.71,-471 656.71,-592 656.71,-592 656.71,-598 650.71,-604 644.71,-604 644.71,-604 437.52,-604 437.52,-604 431.52,-604 425.52,-598 425.52,-592 425.52,-592 425.52,-471 425.52,-471 425.52,-465 431.52,-459 437.52,-459"/>
+<text text-anchor="middle" x="541.12" y="-585.6" font-family="Helvetica,sans-Serif" font-size="16.00">Controller Layer (Entry Points)</text>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_2</title>
+<path fill="#ffffff" stroke="#81c784" d="M795.45,-488C795.45,-488 1611.16,-488 1611.16,-488 1617.16,-488 1623.16,-494 1623.16,-500 1623.16,-500 1623.16,-577 1623.16,-577 1623.16,-583 1617.16,-589 1611.16,-589 1611.16,-589 795.45,-589 795.45,-589 789.45,-589 783.45,-583 783.45,-577 783.45,-577 783.45,-500 783.45,-500 783.45,-494 789.45,-488 795.45,-488"/>
+<text text-anchor="middle" x="1203.3" y="-570.6" font-family="Helvetica,sans-Serif" font-size="16.00">Async Layer (Job Queue + Processor)</text>
+</g>
+<g id="clust4" class="cluster">
+<title>cluster_3</title>
+<path fill="#ffffff" stroke="#ffb74d" d="M1763.9,-8C1763.9,-8 2683.86,-8 2683.86,-8 2689.86,-8 2695.86,-14 2695.86,-20 2695.86,-20 2695.86,-510 2695.86,-510 2695.86,-516 2689.86,-522 2683.86,-522 2683.86,-522 1763.9,-522 1763.9,-522 1757.9,-522 1751.9,-516 1751.9,-510 1751.9,-510 1751.9,-20 1751.9,-20 1751.9,-14 1757.9,-8 1763.9,-8"/>
+<text text-anchor="middle" x="2223.88" y="-503.6" font-family="Helvetica,sans-Serif" font-size="16.00">Service Layer (Business Logic)</text>
+</g>
+<g id="clust5" class="cluster">
+<title>cluster_aws</title>
+<path fill="#ffffff" stroke="#fbc02d" stroke-dasharray="5,2" d="M2028.18,-16C2028.18,-16 2452.38,-16 2452.38,-16 2458.38,-16 2464.38,-22 2464.38,-28 2464.38,-28 2464.38,-89 2464.38,-89 2464.38,-95 2458.38,-101 2452.38,-101 2452.38,-101 2028.18,-101 2028.18,-101 2022.18,-101 2016.18,-95 2016.18,-89 2016.18,-89 2016.18,-28 2016.18,-28 2016.18,-22 2022.18,-16 2028.18,-16"/>
+<text text-anchor="middle" x="2240.28" y="-82.6" font-family="Helvetica,sans-Serif" font-size="16.00">AWS S3 Upload Services</text>
+</g>
+<g id="clust6" class="cluster">
+<title>cluster_azure</title>
+<path fill="#ffffff" stroke="#64b5f6" stroke-dasharray="5,2" d="M2296.92,-109C2296.92,-109 2675.86,-109 2675.86,-109 2681.86,-109 2687.86,-115 2687.86,-121 2687.86,-121 2687.86,-230 2687.86,-230 2687.86,-236 2681.86,-242 2675.86,-242 2675.86,-242 2296.92,-242 2296.92,-242 2290.92,-242 2284.92,-236 2284.92,-230 2284.92,-230 2284.92,-121 2284.92,-121 2284.92,-115 2290.92,-109 2296.92,-109"/>
+<text text-anchor="middle" x="2486.39" y="-223.6" font-family="Helvetica,sans-Serif" font-size="16.00">Azure Upload Services</text>
+</g>
+<g id="clust7" class="cluster">
+<title>cluster_gcp</title>
+<path fill="#ffffff" stroke="#a5d6a7" stroke-dasharray="5,2" d="M2300.04,-250C2300.04,-250 2672.75,-250 2672.75,-250 2678.75,-250 2684.75,-256 2684.75,-262 2684.75,-262 2684.75,-425 2684.75,-425 2684.75,-431 2678.75,-437 2672.75,-437 2672.75,-437 2300.04,-437 2300.04,-437 2294.04,-437 2288.04,-431 2288.04,-425 2288.04,-425 2288.04,-262 2288.04,-262 2288.04,-256 2294.04,-250 2300.04,-250"/>
+<text text-anchor="middle" x="2486.39" y="-418.6" font-family="Helvetica,sans-Serif" font-size="16.00">GCP Upload &amp; Retrieval Services</text>
+</g>
+<g id="clust8" class="cluster">
+<title>cluster_4</title>
+<path fill="#ffffff" stroke="#b39ddb" d="M2286.42,-570C2286.42,-570 2455.5,-570 2455.5,-570 2461.5,-570 2467.5,-576 2467.5,-582 2467.5,-582 2467.5,-719 2467.5,-719 2467.5,-725 2461.5,-731 2455.5,-731 2455.5,-731 2286.42,-731 2286.42,-731 2280.42,-731 2274.42,-725 2274.42,-719 2274.42,-719 2274.42,-582 2274.42,-582 2274.42,-576 2280.42,-570 2286.42,-570"/>
+<text text-anchor="middle" x="2370.96" y="-712.6" font-family="Helvetica,sans-Serif" font-size="16.00">Utility &amp; Support Layer</text>
+</g>
+<g id="clust9" class="cluster">
+<title>cluster_5</title>
+<path fill="#ffffff" stroke="#eeeeee" stroke-dasharray="5,2" d="M2508.5,-530C2508.5,-530 2714.83,-530 2714.83,-530 2720.83,-530 2726.83,-536 2726.83,-542 2726.83,-542 2726.83,-759 2726.83,-759 2726.83,-765 2720.83,-771 2714.83,-771 2714.83,-771 2508.5,-771 2508.5,-771 2502.5,-771 2496.5,-765 2496.5,-759 2496.5,-759 2496.5,-542 2496.5,-542 2496.5,-536 2502.5,-530 2508.5,-530"/>
+<text text-anchor="middle" x="2611.66" y="-752.6" font-family="Helvetica,sans-Serif" font-size="16.00">Job Status Storage (Local FS)</text>
+</g>
+<!-- ClientApp -->
+<g id="node1" class="node">
+<title>ClientApp</title>
+<ellipse fill="#e3f2fd" stroke="black" cx="157.4" cy="-488" rx="68.53" ry="29.42"/>
+<text text-anchor="middle" x="157.4" y="-492.2" font-family="Helvetica,sans-Serif" font-size="14.00">Postman / UI</text>
+<text text-anchor="middle" x="157.4" y="-475.4" font-family="Helvetica,sans-Serif" font-size="14.00">(API Trigger)</text>
+</g>
+<!-- DicomController -->
+<g id="node2" class="node">
+<title>DicomController</title>
+<polygon fill="#bbdefb" stroke="black" points="626.44,-508.8 454.79,-508.8 454.79,-467.2 626.44,-467.2 626.44,-508.8"/>
+<text text-anchor="middle" x="540.62" y="-492.2" font-family="Helvetica,sans-Serif" font-size="14.00">DicomController</text>
+<text text-anchor="middle" x="540.62" y="-475.4" font-family="Helvetica,sans-Serif" font-size="14.00">Handles Upload Request</text>
+</g>
+<!-- ClientApp&#45;&gt;DicomController -->
+<g id="edge1" class="edge">
+<title>ClientApp-&gt;DicomController</title>
+<path fill="none" stroke="#2196f3" stroke-width="2" d="M226.12,-488C286.01,-488 374.14,-488 441.71,-488"/>
+<polygon fill="#2196f3" stroke="#2196f3" stroke-width="2" points="441.48,-491.5 451.48,-488 441.48,-484.5 441.48,-491.5"/>
+<text text-anchor="middle" x="374.16" y="-491.6" font-family="Helvetica,sans-Serif" font-size="12.00">Upload</text>
+</g>
+<!-- DicomDeleteController -->
+<g id="node3" class="node">
+<title>DicomDeleteController</title>
+<polygon fill="#bbdefb" stroke="black" points="619.03,-568.8 462.2,-568.8 462.2,-527.2 619.03,-527.2 619.03,-568.8"/>
+<text text-anchor="middle" x="540.62" y="-552.2" font-family="Helvetica,sans-Serif" font-size="14.00">DicomDeleteController</text>
+<text text-anchor="middle" x="540.62" y="-535.4" font-family="Helvetica,sans-Serif" font-size="14.00">Handles Local Delete</text>
+</g>
+<!-- ClientApp&#45;&gt;DicomDeleteController -->
+<g id="edge4" class="edge">
+<title>ClientApp-&gt;DicomDeleteController</title>
+<path fill="none" stroke="#2196f3" stroke-width="2" d="M222.21,-498.04C284.27,-507.81 379.14,-522.74 449.01,-533.74"/>
+<polygon fill="#2196f3" stroke="#2196f3" stroke-width="2" points="448.33,-537.18 458.76,-535.27 449.42,-530.26 448.33,-537.18"/>
+<text text-anchor="middle" x="374.16" y="-530.48" font-family="Helvetica,sans-Serif" font-size="12.00">Delete Request</text>
+</g>
+<!-- DicomRetrievalService -->
+<g id="node9" class="node">
+<title>DicomRetrievalService</title>
+<polygon fill="#ffe0b2" stroke="black" points="2197.74,-451.8 2006.69,-451.8 2006.69,-410.2 2197.74,-410.2 2197.74,-451.8"/>
+<text text-anchor="middle" x="2102.21" y="-435.2" font-family="Helvetica,sans-Serif" font-size="14.00">DicomRetrievalService</text>
+<text text-anchor="middle" x="2102.21" y="-418.4" font-family="Helvetica,sans-Serif" font-size="14.00">Retrieves Files via GCP API</text>
+</g>
+<!-- ClientApp&#45;&gt;DicomRetrievalService -->
+<g id="edge16" class="edge">
+<title>ClientApp-&gt;DicomRetrievalService</title>
+<path fill="none" stroke="#4caf50" stroke-width="2" d="M213.66,-470.85C287.27,-449.55 421.92,-416 539.62,-416 539.62,-416 539.62,-416 1865.79,-416 1907.55,-416 1953.39,-418.38 1993.44,-421.24"/>
+<polygon fill="#4caf50" stroke="#4caf50" stroke-width="2" points="1992.98,-424.72 2003.21,-421.96 1993.49,-417.74 1992.98,-424.72"/>
+<text text-anchor="middle" x="1187.58" y="-419.6" font-family="Helvetica,sans-Serif" font-size="12.00">Retrieve</text>
+</g>
+<!-- JobQueueManager -->
+<g id="node4" class="node">
+<title>JobQueueManager</title>
+<polygon fill="#c8e6c9" stroke="black" points="953.77,-539.8 791.45,-539.8 791.45,-498.2 953.77,-498.2 953.77,-539.8"/>
+<text text-anchor="middle" x="872.61" y="-523.2" font-family="Helvetica,sans-Serif" font-size="14.00">JobQueueManager</text>
+<text text-anchor="middle" x="872.61" y="-506.4" font-family="Helvetica,sans-Serif" font-size="14.00">Non-blocking Queueing</text>
+</g>
+<!-- DicomController&#45;&gt;JobQueueManager -->
+<g id="edge3" class="edge">
+<title>DicomController-&gt;JobQueueManager</title>
+<path fill="none" stroke="black" d="M626.6,-495.98C673.53,-500.39 731.87,-505.87 779.85,-510.38"/>
+<polygon fill="black" stroke="black" points="779.38,-513.85 789.67,-511.3 780.04,-506.88 779.38,-513.85"/>
+<text text-anchor="middle" x="720.08" y="-512.57" font-family="Helvetica,sans-Serif" font-size="12.00">Enqueue Async Job</text>
+</g>
+<!-- UploadOrchestratorService -->
+<g id="node7" class="node">
+<title>UploadOrchestratorService</title>
+<polygon fill="#ffe0b2" stroke="black" points="1969.69,-486.8 1759.9,-486.8 1759.9,-445.2 1969.69,-445.2 1969.69,-486.8"/>
+<text text-anchor="middle" x="1864.79" y="-470.2" font-family="Helvetica,sans-Serif" font-size="14.00">UploadOrchestratorService</text>
+<text text-anchor="middle" x="1864.79" y="-453.4" font-family="Helvetica,sans-Serif" font-size="14.00">Delegates to appropriate Cloud</text>
+</g>
+<!-- DicomController&#45;&gt;UploadOrchestratorService -->
+<g id="edge2" class="edge">
+<title>DicomController-&gt;UploadOrchestratorService</title>
+<path fill="none" stroke="black" d="M626.63,-479.21C693.22,-473.08 788.21,-466 871.61,-466 871.61,-466 871.61,-466 1508.95,-466 1588.9,-466 1678.98,-466 1748.37,-466"/>
+<polygon fill="black" stroke="black" points="1748.25,-469.5 1758.25,-466 1748.25,-462.5 1748.25,-469.5"/>
+<text text-anchor="middle" x="1187.58" y="-469.6" font-family="Helvetica,sans-Serif" font-size="12.00">Preprocess</text>
+</g>
+<!-- FileJobStore -->
+<g id="node20" class="node">
+<title>FileJobStore</title>
+<polygon fill="#ede7f6" stroke="black" points="2459.5,-636.2 2282.42,-636.2 2282.42,-577.8 2459.5,-577.8 2459.5,-636.2"/>
+<text text-anchor="middle" x="2370.96" y="-619.6" font-family="Helvetica,sans-Serif" font-size="14.00">FileJobStore</text>
+<text text-anchor="middle" x="2370.96" y="-602.8" font-family="Helvetica,sans-Serif" font-size="14.00">Manages Job Status Files</text>
+<text text-anchor="middle" x="2370.96" y="-586" font-family="Helvetica,sans-Serif" font-size="14.00">(JSON-based, Local FS)</text>
+</g>
+<!-- DicomDeleteController&#45;&gt;FileJobStore -->
+<g id="edge5" class="edge">
+<title>DicomDeleteController-&gt;FileJobStore</title>
+<path fill="none" stroke="black" d="M616.62,-569.22C683.07,-586.13 783,-607 871.61,-607 871.61,-607 871.61,-607 2103.21,-607 2158.53,-607 2220.29,-607 2270.45,-607"/>
+<polygon fill="black" stroke="black" points="2270.44,-610.5 2280.44,-607 2270.44,-603.5 2270.44,-610.5"/>
+</g>
+<!-- JobScheduler -->
+<g id="node5" class="node">
+<title>JobScheduler</title>
+<polygon fill="#c8e6c9" stroke="black" points="1284.68,-542.8 1090.49,-542.8 1090.49,-501.2 1284.68,-501.2 1284.68,-542.8"/>
+<text text-anchor="middle" x="1187.58" y="-526.2" font-family="Helvetica,sans-Serif" font-size="14.00">JobScheduler</text>
+<text text-anchor="middle" x="1187.58" y="-509.4" font-family="Helvetica,sans-Serif" font-size="14.00">Dispatches Jobs Periodically</text>
+</g>
+<!-- JobQueueManager&#45;&gt;JobScheduler -->
+<g id="edge6" class="edge">
+<title>JobQueueManager-&gt;JobScheduler</title>
+<path fill="none" stroke="black" d="M954.21,-519.77C992.12,-520.14 1037.87,-520.57 1078.72,-520.97"/>
+<polygon fill="black" stroke="black" points="1078.55,-524.46 1088.58,-521.06 1078.62,-517.46 1078.55,-524.46"/>
+<text text-anchor="middle" x="1022.13" y="-524.46" font-family="Helvetica,sans-Serif" font-size="12.00">Non-blocking Push</text>
+</g>
+<!-- JobProcessor -->
+<g id="node6" class="node">
+<title>JobProcessor</title>
+<polygon fill="#c8e6c9" stroke="black" points="1615.16,-554.2 1400.74,-554.2 1400.74,-495.8 1615.16,-495.8 1615.16,-554.2"/>
+<text text-anchor="middle" x="1507.95" y="-537.6" font-family="Helvetica,sans-Serif" font-size="14.00">JobProcessor</text>
+<text text-anchor="middle" x="1507.95" y="-520.8" font-family="Helvetica,sans-Serif" font-size="14.00">Worker Thread</text>
+<text text-anchor="middle" x="1507.95" y="-504" font-family="Helvetica,sans-Serif" font-size="14.00">(Pulls jobs and invokes Service)</text>
+</g>
+<!-- JobScheduler&#45;&gt;JobProcessor -->
+<g id="edge7" class="edge">
+<title>JobScheduler-&gt;JobProcessor</title>
+<path fill="none" stroke="black" d="M1284.97,-522.91C1317.69,-523.22 1354.63,-523.56 1388.84,-523.89"/>
+<polygon fill="black" stroke="black" points="1388.79,-527.39 1398.82,-523.98 1388.85,-520.39 1388.79,-527.39"/>
+<text text-anchor="middle" x="1342.71" y="-527.37" font-family="Helvetica,sans-Serif" font-size="12.00">Scheduled Pull</text>
+</g>
+<!-- JobProcessor&#45;&gt;UploadOrchestratorService -->
+<g id="edge8" class="edge">
+<title>JobProcessor-&gt;UploadOrchestratorService</title>
+<path fill="none" stroke="black" d="M1615.41,-507.3C1657.3,-500.33 1705.5,-492.32 1748.22,-485.22"/>
+<polygon fill="black" stroke="black" points="1748.76,-488.68 1758.05,-483.58 1747.61,-481.77 1748.76,-488.68"/>
+<text text-anchor="middle" x="1687.53" y="-507.83" font-family="Helvetica,sans-Serif" font-size="12.00">Invoke Upload Logic</text>
+</g>
+<!-- CloudUploaderFactory -->
+<g id="node10" class="node">
+<title>CloudUploaderFactory</title>
+<polygon fill="#fff9c4" stroke="black" points="2180.25,-65.8 2024.18,-65.8 2024.18,-24.2 2180.25,-24.2 2180.25,-65.8"/>
+<text text-anchor="middle" x="2102.21" y="-49.2" font-family="Helvetica,sans-Serif" font-size="14.00">CloudUploaderFactory</text>
+<text text-anchor="middle" x="2102.21" y="-32.4" font-family="Helvetica,sans-Serif" font-size="14.00">(Strategy Pattern)</text>
+</g>
+<!-- UploadOrchestratorService&#45;&gt;CloudUploaderFactory -->
+<g id="edge9" class="edge">
+<title>UploadOrchestratorService-&gt;CloudUploaderFactory</title>
+<path fill="none" stroke="black" d="M1866.7,-445.14C1870.72,-379.49 1892.3,-175.24 2006.69,-70 2009.01,-67.86 2011.49,-65.91 2014.1,-64.11"/>
+<polygon fill="black" stroke="black" points="2015.85,-67.14 2022.72,-59.07 2012.32,-61.1 2015.85,-67.14"/>
+</g>
+<!-- DicomValidator -->
+<g id="node19" class="node">
+<title>DicomValidator</title>
+<polygon fill="#ede7f6" stroke="black" points="2458.31,-695.8 2283.6,-695.8 2283.6,-654.2 2458.31,-654.2 2458.31,-695.8"/>
+<text text-anchor="middle" x="2370.96" y="-679.2" font-family="Helvetica,sans-Serif" font-size="14.00">DicomValidator</text>
+<text text-anchor="middle" x="2370.96" y="-662.4" font-family="Helvetica,sans-Serif" font-size="14.00">(Checks .dcm file validity)</text>
+</g>
+<!-- UploadOrchestratorService&#45;&gt;DicomValidator -->
+<g id="edge10" class="edge">
+<title>UploadOrchestratorService-&gt;DicomValidator</title>
+<path fill="none" stroke="black" d="M1909.15,-487.29C1982.94,-522.99 2138.18,-595.85 2274.42,-645 2279.14,-646.71 2284.02,-648.41 2288.95,-650.09"/>
+<polygon fill="black" stroke="black" points="2287.78,-653.39 2298.37,-653.24 2290,-646.75 2287.78,-653.39"/>
+</g>
+<!-- DownloaderService -->
+<g id="node8" class="node">
+<title>DownloaderService</title>
+<polygon fill="#ffe0b2" stroke="black" points="2454.43,-486.8 2287.48,-486.8 2287.48,-445.2 2454.43,-445.2 2454.43,-486.8"/>
+<text text-anchor="middle" x="2370.96" y="-470.2" font-family="Helvetica,sans-Serif" font-size="14.00">DownloaderService</text>
+<text text-anchor="middle" x="2370.96" y="-453.4" font-family="Helvetica,sans-Serif" font-size="14.00">Fetches files from Cloud</text>
+</g>
+<!-- DicomRetrievalService&#45;&gt;DownloaderService -->
+<g id="edge18" class="edge">
+<title>DicomRetrievalService-&gt;DownloaderService</title>
+<path fill="none" stroke="black" d="M2198.01,-443.44C2223.44,-446.78 2250.93,-450.38 2276.3,-453.71"/>
+<polygon fill="black" stroke="black" points="2275.54,-457.14 2285.91,-454.97 2276.45,-450.2 2275.54,-457.14"/>
+</g>
+<!-- GCPRetrievalService -->
+<g id="node17" class="node">
+<title>GCPRetrievalService</title>
+<polygon fill="#e8f5e9" stroke="black" points="2445.09,-402 2296.83,-402 2296.83,-366 2445.09,-366 2445.09,-402"/>
+<text text-anchor="middle" x="2370.96" y="-379.8" font-family="Helvetica,sans-Serif" font-size="14.00">GCPRetrievalService</text>
+</g>
+<!-- DicomRetrievalService&#45;&gt;GCPRetrievalService -->
+<g id="edge17" class="edge">
+<title>DicomRetrievalService-&gt;GCPRetrievalService</title>
+<path fill="none" stroke="#66bb6a" d="M2198.01,-414.3C2226.44,-409.29 2257.42,-403.83 2285.16,-398.94"/>
+<polygon fill="#66bb6a" stroke="#66bb6a" points="2285.7,-402.4 2294.94,-397.22 2284.48,-395.51 2285.7,-402.4"/>
+<text text-anchor="middle" x="2240.08" y="-413.91" font-family="Helvetica,sans-Serif" font-size="12.00">GCP API</text>
+</g>
+<!-- DicomRetrievalService&#45;&gt;FileJobStore -->
+<g id="edge19" class="edge">
+<title>DicomRetrievalService-&gt;FileJobStore</title>
+<path fill="none" stroke="black" d="M2135.39,-452.23C2180.09,-481.73 2261.6,-535.5 2315.77,-571.25"/>
+<polygon fill="black" stroke="black" points="2313.68,-574.06 2323.96,-576.65 2317.54,-568.22 2313.68,-574.06"/>
+</g>
+<!-- S3PresignedUrlService -->
+<g id="node11" class="node">
+<title>S3PresignedUrlService</title>
+<polygon fill="#fff9c4" stroke="black" points="2456.38,-65.8 2285.53,-65.8 2285.53,-24.2 2456.38,-24.2 2456.38,-65.8"/>
+<text text-anchor="middle" x="2370.96" y="-49.2" font-family="Helvetica,sans-Serif" font-size="14.00">S3PresignedUrlService</text>
+<text text-anchor="middle" x="2370.96" y="-32.4" font-family="Helvetica,sans-Serif" font-size="14.00">(Generates Upload URL)</text>
+</g>
+<!-- CloudUploaderFactory&#45;&gt;S3PresignedUrlService -->
+<g id="edge13" class="edge">
+<title>CloudUploaderFactory-&gt;S3PresignedUrlService</title>
+<path fill="none" stroke="#fbc02d" stroke-width="2" d="M2180.72,-45C2209.39,-45 2242.26,-45 2272.48,-45"/>
+<polygon fill="#fbc02d" stroke="#fbc02d" stroke-width="2" points="2272.22,-48.5 2282.22,-45 2272.22,-41.5 2272.22,-48.5"/>
+<text text-anchor="middle" x="2240.08" y="-48.6" font-family="Helvetica,sans-Serif" font-size="12.00">S3</text>
+</g>
+<!-- AzureUploader -->
+<g id="node13" class="node">
+<title>AzureUploader</title>
+<polygon fill="#e3f2fd" stroke="black" points="2425.65,-207 2316.26,-207 2316.26,-171 2425.65,-171 2425.65,-207"/>
+<text text-anchor="middle" x="2370.96" y="-184.8" font-family="Helvetica,sans-Serif" font-size="14.00">AzureUploader</text>
+</g>
+<!-- CloudUploaderFactory&#45;&gt;AzureUploader -->
+<g id="edge11" class="edge">
+<title>CloudUploaderFactory-&gt;AzureUploader</title>
+<path fill="none" stroke="#42a5f5" stroke-width="2" d="M2180.27,-60.97C2186.39,-63.55 2192.3,-66.53 2197.74,-70 2242.63,-98.6 2229.77,-133.02 2274.42,-162 2283.35,-167.8 2293.54,-172.37 2303.86,-175.97"/>
+<polygon fill="#42a5f5" stroke="#42a5f5" stroke-width="2" points="2302.49,-179.21 2313.08,-178.86 2304.58,-172.53 2302.49,-179.21"/>
+<text text-anchor="middle" x="2240.08" y="-156.75" font-family="Helvetica,sans-Serif" font-size="12.00">Azure</text>
+</g>
+<!-- GCPUploader -->
+<g id="node16" class="node">
+<title>GCPUploader</title>
+<polygon fill="#e8f5e9" stroke="black" points="2422.53,-348 2319.38,-348 2319.38,-312 2422.53,-312 2422.53,-348"/>
+<text text-anchor="middle" x="2370.96" y="-325.8" font-family="Helvetica,sans-Serif" font-size="14.00">GCPUploader</text>
+</g>
+<!-- CloudUploaderFactory&#45;&gt;GCPUploader -->
+<g id="edge12" class="edge">
+<title>CloudUploaderFactory-&gt;GCPUploader</title>
+<path fill="none" stroke="#66bb6a" stroke-width="2" d="M2180.37,-56.96C2186.85,-60.35 2192.8,-64.63 2197.74,-70 2228.89,-103.89 2198.94,-129.14 2215.74,-172 2230.31,-209.21 2249.77,-210.42 2264.42,-247.6 2273.59,-270.88 2257.6,-284.47 2274.42,-303 2283.02,-312.48 2294.67,-318.73 2306.87,-322.83"/>
+<polygon fill="#66bb6a" stroke="#66bb6a" stroke-width="2" points="2305.68,-326.13 2316.25,-325.44 2307.56,-319.38 2305.68,-326.13"/>
+<text text-anchor="middle" x="2240.08" y="-251.2" font-family="Helvetica,sans-Serif" font-size="12.00">GCP</text>
+</g>
+<!-- AzureUploaderService -->
+<g id="node12" class="node">
+<title>AzureUploaderService</title>
+<polygon fill="#e3f2fd" stroke="black" points="2448.99,-153 2292.92,-153 2292.92,-117 2448.99,-117 2448.99,-153"/>
+<text text-anchor="middle" x="2370.96" y="-130.8" font-family="Helvetica,sans-Serif" font-size="14.00">AzureUploaderService</text>
+</g>
+<!-- BlobUploaderAzure -->
+<g id="node14" class="node">
+<title>BlobUploaderAzure</title>
+<polygon fill="#e3f2fd" stroke="black" points="2679.86,-207 2542.46,-207 2542.46,-171 2679.86,-171 2679.86,-207"/>
+<text text-anchor="middle" x="2611.16" y="-184.8" font-family="Helvetica,sans-Serif" font-size="14.00">BlobUploaderAzure</text>
+</g>
+<!-- AzureUploader&#45;&gt;BlobUploaderAzure -->
+<g id="edge14" class="edge">
+<title>AzureUploader-&gt;BlobUploaderAzure</title>
+<path fill="none" stroke="black" d="M2426.01,-189C2456.96,-189 2496.37,-189 2530.79,-189"/>
+<polygon fill="black" stroke="black" points="2530.73,-192.5 2540.73,-189 2530.73,-185.5 2530.73,-192.5"/>
+</g>
+<!-- GCPUploaderService -->
+<g id="node15" class="node">
+<title>GCPUploaderService</title>
+<polygon fill="#e8f5e9" stroke="black" points="2445.87,-294 2296.04,-294 2296.04,-258 2445.87,-258 2445.87,-294"/>
+<text text-anchor="middle" x="2370.96" y="-271.8" font-family="Helvetica,sans-Serif" font-size="14.00">GCPUploaderService</text>
+</g>
+<!-- BlobUploaderGCP -->
+<g id="node18" class="node">
+<title>BlobUploaderGCP</title>
+<polygon fill="#e8f5e9" stroke="black" points="2676.75,-348 2545.58,-348 2545.58,-312 2676.75,-312 2676.75,-348"/>
+<text text-anchor="middle" x="2611.16" y="-325.8" font-family="Helvetica,sans-Serif" font-size="14.00">BlobUploaderGCP</text>
+</g>
+<!-- GCPUploader&#45;&gt;BlobUploaderGCP -->
+<g id="edge15" class="edge">
+<title>GCPUploader-&gt;BlobUploaderGCP</title>
+<path fill="none" stroke="black" d="M2422.76,-330C2455.21,-330 2497.86,-330 2534.28,-330"/>
+<polygon fill="black" stroke="black" points="2533.85,-333.5 2543.85,-330 2533.85,-326.5 2533.85,-333.5"/>
+</g>
+<!-- JobsQueued -->
+<g id="node21" class="node">
+<title>JobsQueued</title>
+<polygon fill="#f5f5f5" stroke="black" points="2657.31,-574 2565.02,-574 2565.02,-538 2657.31,-538 2657.31,-574"/>
+<text text-anchor="middle" x="2611.16" y="-551.8" font-family="Helvetica,sans-Serif" font-size="14.00">jobs/queued</text>
+</g>
+<!-- FileJobStore&#45;&gt;JobsQueued -->
+<g id="edge20" class="edge">
+<title>FileJobStore-&gt;JobsQueued</title>
+<path fill="none" stroke="black" d="M2459.98,-588.15C2491.2,-581.47 2525.48,-574.13 2553.39,-568.15"/>
+<polygon fill="black" stroke="black" points="2554.02,-571.6 2563.07,-566.08 2552.55,-564.75 2554.02,-571.6"/>
+</g>
+<!-- JobsInProgress -->
+<g id="node22" class="node">
+<title>JobsInProgress</title>
+<polygon fill="#f5f5f5" stroke="black" points="2670.52,-736 2551.8,-736 2551.8,-700 2670.52,-700 2670.52,-736"/>
+<text text-anchor="middle" x="2611.16" y="-713.8" font-family="Helvetica,sans-Serif" font-size="14.00">jobs/in_progress</text>
+</g>
+<!-- FileJobStore&#45;&gt;JobsInProgress -->
+<g id="edge21" class="edge">
+<title>FileJobStore-&gt;JobsInProgress</title>
+<path fill="none" stroke="black" d="M2455.63,-636.43C2459.8,-639.07 2463.79,-641.92 2467.5,-645 2486.08,-660.45 2476.84,-676.94 2496.5,-691 2509.31,-700.16 2524.81,-706.25 2540.18,-710.28"/>
+<polygon fill="black" stroke="black" points="2539.31,-713.67 2549.84,-712.53 2540.89,-706.86 2539.31,-713.67"/>
+</g>
+<!-- JobsCompleted -->
+<g id="node23" class="node">
+<title>JobsCompleted</title>
+<polygon fill="#f5f5f5" stroke="black" points="2666.24,-682 2556.08,-682 2556.08,-646 2666.24,-646 2666.24,-682"/>
+<text text-anchor="middle" x="2611.16" y="-659.8" font-family="Helvetica,sans-Serif" font-size="14.00">jobs/completed</text>
+</g>
+<!-- FileJobStore&#45;&gt;JobsCompleted -->
+<g id="edge22" class="edge">
+<title>FileJobStore-&gt;JobsCompleted</title>
+<path fill="none" stroke="black" d="M2459.72,-628.18C2472.07,-631.15 2484.6,-634.15 2496.5,-637 2512.2,-640.76 2529.14,-644.79 2545.01,-648.56"/>
+<polygon fill="black" stroke="black" points="2543.8,-651.87 2554.33,-650.78 2545.41,-645.06 2543.8,-651.87"/>
+</g>
+<!-- JobsFailed -->
+<g id="node24" class="node">
+<title>JobsFailed</title>
+<polygon fill="#f5f5f5" stroke="black" points="2650.68,-628 2571.64,-628 2571.64,-592 2650.68,-592 2650.68,-628"/>
+<text text-anchor="middle" x="2611.16" y="-605.8" font-family="Helvetica,sans-Serif" font-size="14.00">jobs/failed</text>
+</g>
+<!-- FileJobStore&#45;&gt;JobsFailed -->
+<g id="edge23" class="edge">
+<title>FileJobStore-&gt;JobsFailed</title>
+<path fill="none" stroke="black" d="M2459.98,-608.11C2493.64,-608.53 2530.87,-609 2559.83,-609.37"/>
+<polygon fill="black" stroke="black" points="2559.75,-612.87 2569.79,-609.49 2559.84,-605.87 2559.75,-612.87"/>
+</g>
+<!-- Legend -->
+<g id="node25" class="node">
+<title>Legend</title>
+<polygon fill="#fffde7" stroke="black" points="308.8,-665 0,-665 0,-561 314.8,-561 314.8,-659 308.8,-665"/>
+<polyline fill="none" stroke="black" points="308.8,-665 308.8,-659"/>
+<polyline fill="none" stroke="black" points="314.8,-659 308.8,-659"/>
+<text text-anchor="start" x="112.72" y="-651.2" font-family="Helvetica,sans-Serif" font-size="12.00">        </text>
+<text text-anchor="start" x="139.39" y="-651.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="12.00">By Ayan P.</text>
+<text text-anchor="start" x="108.05" y="-639.2" font-family="Helvetica,sans-Serif" font-size="12.00">        </text>
+<text text-anchor="start" x="134.72" y="-639.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#42a5f5">Blue</text>
+<text text-anchor="start" x="158.74" y="-639.2" font-family="Helvetica,sans-Serif" font-size="12.00"> → Azure</text>
+<text text-anchor="start" x="106.05" y="-627.2" font-family="Helvetica,sans-Serif" font-size="12.00">        </text>
+<text text-anchor="start" x="132.73" y="-627.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#66bb6a">Green</text>
+<text text-anchor="start" x="166.08" y="-627.2" font-family="Helvetica,sans-Serif" font-size="12.00"> → GCP</text>
+<text text-anchor="start" x="95.38" y="-615.2" font-family="Helvetica,sans-Serif" font-size="12.00">        </text>
+<text text-anchor="start" x="122.06" y="-615.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#fbc02d">Yellow</text>
+<text text-anchor="start" x="157.41" y="-615.2" font-family="Helvetica,sans-Serif" font-size="12.00"> → AWS S3</text>
+<text text-anchor="start" x="77.05" y="-603.2" font-family="Helvetica,sans-Serif" font-size="12.00">        </text>
+<text text-anchor="start" x="103.72" y="-603.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#9e9e9e">Grey</text>
+<text text-anchor="start" x="129.72" y="-603.2" font-family="Helvetica,sans-Serif" font-size="12.00"> → Local FileSystem</text>
+<text text-anchor="start" x="48.85" y="-579.2" font-family="Helvetica,sans-Serif" font-size="12.00">        </text>
+<text text-anchor="start" x="75.52" y="-579.2" font-family="Helvetica,sans-Serif" font-style="italic" font-size="12.00">Job Queue is Async + Non-blocking</text>
+<text text-anchor="start" x="8" y="-567.2" font-family="Helvetica,sans-Serif" font-size="12.00">        </text>
+<text text-anchor="start" x="34.67" y="-567.2" font-family="Helvetica,sans-Serif" font-style="italic" font-size="12.00">JobProcessor fetches jobs in background worker</text>
+<text text-anchor="start" x="293.47" y="-567.2" font-family="Helvetica,sans-Serif" font-size="12.00">    </text>
+</g>
+</g>
+</svg>
