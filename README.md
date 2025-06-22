@@ -40,7 +40,7 @@ A modern, **asynchronous**, **cloud-agnostic** Spring Boot service for **uploadi
 
 ## 🗂️ Architecture Overview
 
-![Alt Text](https://raw.githubusercontent.com/latecoder10/nDP_VNA/refs/heads/master/nDP_v1.svg)
+![Alt Text](https://raw.githubusercontent.com/ayan-estuate/dicom_uploader/refs/heads/ayan-3/pipeline_flow/dicom_uploader_pipeline.svg)
 
 ---
 ## 🗂️ Folder Structure
