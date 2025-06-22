@@ -62,10 +62,10 @@ public class DicomController {
                         }
                     }
                     case "azure" -> {
-//                        if (request.getBlobContainer() == null || request.getBlobPath() == null) {
-//                            return ResponseEntity.badRequest()
-//                                    .body(new UploadResponse("error", "Missing blobContainer or blobPath for Azure blob storage", null));
-//                        }
+                        if (request.getBlobContainer() == null || request.getBlobPath() == null) {
+                            return ResponseEntity.badRequest()
+                                    .body(new UploadResponse("error", "Missing blobContainer or blobPath for Azure blob storage", null));
+                        }
                     }
                     default -> {
                         return ResponseEntity.badRequest()

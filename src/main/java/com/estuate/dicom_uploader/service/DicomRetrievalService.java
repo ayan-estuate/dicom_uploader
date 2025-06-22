@@ -29,7 +29,7 @@ public class DicomRetrievalService {
                             job.getObjectKey());
                 } else {
                     gcpRetrievalService.retrieveFromGCPBlobAndUploadToS3(
-                            job.getGcpProjectId(), job.getBucketName(), job.getObjectKey(), job.getObjectKey());
+                            job.getGcpProjectId(), job.getBucketName(), job.getBlobPath(), job.getObjectKey());
                 }
             }
             case "azure" -> {

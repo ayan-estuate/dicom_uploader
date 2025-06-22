@@ -21,7 +21,9 @@ import org.dcm4che3.io.DicomInputStream;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.concurrent.*;
@@ -32,6 +34,7 @@ import java.util.concurrent.*;
 public class GCPUploaderService {
 
     private final GCPConfig config;
+    private final ExecutorService bucketExecutor;
 
     public void uploadToGCP(byte[] dicomData, Job job) throws IOException {
         // Extract UIDs and store in Job
@@ -113,16 +116,13 @@ public class GCPUploaderService {
     }
 
     private Bucket safelyFetchBucket(Storage storage, String bucketName, long timeout, TimeUnit unit) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         try {
-            Future<Bucket> future = executor.submit(() -> storage.get(bucketName));
+            Future<Bucket> future = bucketExecutor.submit(() -> storage.get(bucketName));
             return future.get(timeout, unit);
         } catch (TimeoutException te) {
             log.error("❌ Timeout fetching bucket '{}'", bucketName);
         } catch (Exception e) {
             log.error("❌ Error fetching bucket '{}'", bucketName, e);
-        } finally {
-            executor.shutdownNow();
         }
         return null;
     }
