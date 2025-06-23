@@ -56,7 +56,7 @@ public class JobProcessor {
         log.info("Upload job {} processed successfully", job.getJobId());
     }
 
-    private void processRetrievalJob(Job job) {
+    private void processRetrievalJob(Job job) throws IOException {
         dicomRetrievalService.retrieveAndUpload(job);
         log.info("Retrieval job {} processed successfully", job.getJobId());
     }

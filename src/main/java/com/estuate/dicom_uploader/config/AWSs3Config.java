@@ -52,4 +52,5 @@ public class AWSs3Config {
                 .credentialsProvider(assumedRoleProvider())
                 .build();
     }
+
 }
