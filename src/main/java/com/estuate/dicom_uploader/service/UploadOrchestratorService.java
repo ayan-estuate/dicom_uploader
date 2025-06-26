@@ -39,6 +39,9 @@ public class UploadOrchestratorService {
         try {
             dicomBytes = Files.readAllBytes(tempDicom.toPath()); // Read once
 
+            // 🔍 NEW: auto-detect DICOM
+            boolean isDicom = DicomValidator.isValidDicom(dicomBytes);
+            job.setStorageType(isDicom ? "native" : "blob");
             // Validate if native
             if ("native".equalsIgnoreCase(job.getStorageType()) &&
                     !DicomValidator.isValidDicom(dicomBytes)) {

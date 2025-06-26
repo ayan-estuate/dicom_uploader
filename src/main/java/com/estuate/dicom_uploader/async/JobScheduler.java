@@ -38,11 +38,11 @@ public class JobScheduler {
         try {
             List<Job> queuedJobs = jobQueueManager.getQueuedJobs();
             for (Job job : queuedJobs) {
-                log.info("🚀 Submitting job {} to thread pool", job.getJobId());
+                log.info("Submitting job {} to thread pool", job.getJobId());
                 uploadExecutor.submit(() -> jobProcessor.processJob(job));
             }
         } catch (IOException e) {
-            log.error("❌ Failed to fetch queued jobs: {}", e.getMessage(), e);
+            log.error("Failed to fetch queued jobs: {}", e.getMessage(), e);
         }
     }
 }

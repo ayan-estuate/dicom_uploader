@@ -41,10 +41,10 @@ public class JobProcessor {
                 }
 
                 jobQueueManager.updateJobStatus(job, JobStatus.COMPLETED);
-                log.info("✅ Job {} completed successfully", job.getJobId());
+                log.info("Job {} completed successfully", job.getJobId());
 
             } catch (Exception e) {
-                log.error("❌ Job {} failed: {}", job.getJobId(), e.getMessage(), e);
+                log.error("Job {} failed: {}", job.getJobId(), e.getMessage(), e);
                 try {
                     job.setErrorMessage(e.getMessage());
                     jobQueueManager.updateJobStatus(job, JobStatus.FAILED);

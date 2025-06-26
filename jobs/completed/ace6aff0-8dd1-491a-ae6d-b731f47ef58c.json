@@ -1,0 +1,1 @@
+{"jobId":"ace6aff0-8dd1-491a-ae6d-b731f47ef58c","jobType":"UPLOAD","objectKey":"DICOM2/dicom_00013659_019.dcm","platform":"azure","storageType":"blob","status":"COMPLETED","createdAt":"2025-06-22T15:11:36.303472700Z","updatedAt":"2025-06-22T15:11:54.546306700Z","blobPath":"studies/2025/07","blobContainer":"dicom-archive"}

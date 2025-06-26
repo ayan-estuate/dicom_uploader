@@ -28,7 +28,7 @@ public class DownloaderService {
             }
 
 //            Path tempFilePath = Files.createTempFile("dicom_" + jobId + "_" + UUID.randomUUID(), ".dcm");
-            Path tempFilePath = Files.createTempFile(Paths.get(System.getProperty("user.dir")), "dicom_" + jobId + "_", ".dcm");
+            Path tempFilePath = Files.createTempFile(Paths.get(System.getProperty("user.dir"), "jobs", "temp"), "dicom_" + jobId + "_", ".dcm");
 
             File tempFile = tempFilePath.toFile();
 

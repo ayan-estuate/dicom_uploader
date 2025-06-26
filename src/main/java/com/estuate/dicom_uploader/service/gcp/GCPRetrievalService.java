@@ -50,13 +50,13 @@ public class GCPRetrievalService {
             URL putUrl = s3PresignedUrlService.generatePresignedPutUrl(objectKey);
             uploadToS3ViaPresignedUrl(putUrl, dicomBytes);
 
-            log.info("✅ GCP native retrieval roundtrip complete for instance {}", instanceUid);
+            log.info("GCP native retrieval roundtrip complete for instance {}", instanceUid);
 
             // Step 3: Cleanup
             deleteFromGCP(projectId, location, dataset, dicomStore, studyUid, seriesUid, instanceUid, token);
 
         } catch (Exception e) {
-            log.error("❌ GCP native roundtrip failed", e);
+            log.error("GCP native roundtrip failed", e);
             throw new RuntimeException("DICOM round-trip failed", e);
         }
     }
@@ -75,12 +75,12 @@ public class GCPRetrievalService {
             }
 
             byte[] data = blob.getContent();
-            log.info("📦 Retrieved blob from GCP Storage: gs://{}/{}", bucketName, blobName);
+            log.info("Retrieved blob from GCP Storage: gs://{}/{}", bucketName, blobName);
 
             URL s3PutUrl = s3PresignedUrlService.generatePresignedPutUrl(s3ObjectKey);
             uploadToS3ViaPresignedUrl(s3PutUrl, data);
 
-            log.info("✅ Uploaded blob to S3: {}", s3ObjectKey);
+            log.info("Uploaded blob to S3: {}", s3ObjectKey);
 
             boolean deleted = storage.delete(BlobId.of(bucketName, blobName));
             if (deleted) {
@@ -88,7 +88,7 @@ public class GCPRetrievalService {
             }
 
         } catch (Exception e) {
-            log.error("❌ GCP blob roundtrip failed", e);
+            log.error("GCP blob roundtrip failed", e);
             throw new RuntimeException("Blob roundtrip failed", e);
         }
     }
@@ -106,7 +106,7 @@ public class GCPRetrievalService {
                 throw new IOException("Upload to S3 failed, HTTP status: " + status);
             }
 
-            log.info("✅ Upload to S3 via presigned URL complete");
+            log.info("Upload to S3 via presigned URL complete");
         }
     }
 
@@ -130,7 +130,7 @@ public class GCPRetrievalService {
                 throw new IOException("GCP delete failed, HTTP status: " + status);
             }
 
-            log.info("✅ Deleted instance from GCP store");
+            log.info("Deleted instance from GCP store");
         }
     }
 

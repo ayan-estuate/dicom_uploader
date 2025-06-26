@@ -29,60 +29,78 @@ public class DicomController {
     private static final Set<String> SUPPORTED_PLATFORMS = Set.of("gcp", "azure");
     private static final Set<String> SUPPORTED_STORAGE_TYPES = Set.of("native", "blob");
 
+//    @PostMapping("/upload")
+//    public ResponseEntity<UploadResponse> uploadDicom(@RequestBody @Valid UploadRequest request) throws IOException {
+//        String platform = request.getPlatform().toLowerCase();
+//        String storageType = request.getStorageType().toLowerCase();
+//
+//        if (!SUPPORTED_PLATFORMS.contains(platform)) {
+//            return ResponseEntity.badRequest()
+//                    .body(new UploadResponse("error", "Unsupported platform: " + request.getPlatform(), null));
+//        }
+//
+////        if (!SUPPORTED_STORAGE_TYPES.contains(storageType)) {
+////            return ResponseEntity.badRequest()
+////                    .body(new UploadResponse("error", "Unsupported storage type: " + request.getStorageType(), null));
+////        }
+//
+//        // Use switch expression with pattern matching-style branching
+//        switch (storageType) {
+//            case "native" -> {
+
+    /// /                if (request.getDatasetName() == null || request.getDicomStoreName() == null) {
+    /// /                    return ResponseEntity.badRequest()
+    /// /                            .body(new UploadResponse("error", "Missing datasetName or dicomStoreName for native storage", null));
+    /// /                }
+//                log.info("Validated native storage for platform: {}", platform);
+//            }
+//            case "blob" -> {
+//                switch (platform) {
+//                    case "gcp" -> {
+//                        if (request.getBucketName() == null || request.getBlobPath() == null) {
+//                            return ResponseEntity.badRequest()
+//                                    .body(new UploadResponse("error", "Missing bucketName or blobPath for GCP blob storage", null));
+//                        }
+//                    }
+//                    case "azure" -> {
+//                        if (request.getBlobContainer() == null || request.getBlobPath() == null) {
+//                            return ResponseEntity.badRequest()
+//                                    .body(new UploadResponse("error", "Missing blobContainer or blobPath for Azure blob storage", null));
+//                        }
+//                    }
+//                    default -> {
+//                        return ResponseEntity.badRequest()
+//                                .body(new UploadResponse("error", "Unsupported platform for blob storage: " + platform, null));
+//                    }
+//                }
+//                log.info("Validated blob storage for platform: {}", platform);
+//            }
+//            default -> {
+//                return ResponseEntity.badRequest()
+//                        .body(new UploadResponse("error", "Unhandled storage type: " + storageType, null));
+//            }
+//        }
+//
+//        Job job = jobQueueManager.enqueueUploadJob(request);
+//        return ResponseEntity.ok(new UploadResponse("success", "Job queued", job.getJobId()));
+//    }
     @PostMapping("/upload")
     public ResponseEntity<UploadResponse> uploadDicom(@RequestBody @Valid UploadRequest request) throws IOException {
         String platform = request.getPlatform().toLowerCase();
-        String storageType = request.getStorageType().toLowerCase();
 
         if (!SUPPORTED_PLATFORMS.contains(platform)) {
             return ResponseEntity.badRequest()
                     .body(new UploadResponse("error", "Unsupported platform: " + request.getPlatform(), null));
         }
 
-        if (!SUPPORTED_STORAGE_TYPES.contains(storageType)) {
-            return ResponseEntity.badRequest()
-                    .body(new UploadResponse("error", "Unsupported storage type: " + request.getStorageType(), null));
-        }
 
-        // Use switch expression with pattern matching-style branching
-        switch (storageType) {
-            case "native" -> {
-//                if (request.getDatasetName() == null || request.getDicomStoreName() == null) {
-//                    return ResponseEntity.badRequest()
-//                            .body(new UploadResponse("error", "Missing datasetName or dicomStoreName for native storage", null));
-//                }
-                log.info("Validated native storage for platform: {}", platform);
-            }
-            case "blob" -> {
-                switch (platform) {
-                    case "gcp" -> {
-                        if (request.getBucketName() == null || request.getBlobPath() == null) {
-                            return ResponseEntity.badRequest()
-                                    .body(new UploadResponse("error", "Missing bucketName or blobPath for GCP blob storage", null));
-                        }
-                    }
-                    case "azure" -> {
-                        if (request.getBlobContainer() == null || request.getBlobPath() == null) {
-                            return ResponseEntity.badRequest()
-                                    .body(new UploadResponse("error", "Missing blobContainer or blobPath for Azure blob storage", null));
-                        }
-                    }
-                    default -> {
-                        return ResponseEntity.badRequest()
-                                .body(new UploadResponse("error", "Unsupported platform for blob storage: " + platform, null));
-                    }
-                }
-                log.info("Validated blob storage for platform: {}", platform);
-            }
-            default -> {
-                return ResponseEntity.badRequest()
-                        .body(new UploadResponse("error", "Unhandled storage type: " + storageType, null));
-            }
-        }
+        log.info("Validated platform={} and basic blob fallback info", platform);
 
+        // Enqueue without checking storageType — it'll be inferred later
         Job job = jobQueueManager.enqueueUploadJob(request);
         return ResponseEntity.ok(new UploadResponse("success", "Job queued", job.getJobId()));
     }
+
 
     @PostMapping("/retrieve")
     public ResponseEntity<UploadResponse> retrieveDicom(@RequestBody @Valid DicomRetrievalRequest request) throws IOException {

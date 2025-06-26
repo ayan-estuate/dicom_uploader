@@ -64,7 +64,7 @@ public class AzureUploaderService {
             logger.info("Extracted DICOM UIDs — SOP: {}, Study: {}, Series: {}",
                     job.getInstanceUid(), job.getStudyUid(), job.getSeriesUid());
         } catch (Exception e) {
-            logger.warn("⚠️ Failed to extract DICOM UIDs before Azure upload", e);
+            logger.warn("Failed to extract DICOM UIDs before Azure upload", e);
         }
 
         String url = config.getDicomEndpoint() + "/v1/partitions/default/studies";
@@ -92,7 +92,7 @@ public class AzureUploaderService {
                 throw new UploadFailedException("Azure upload failed. HTTP Status: " + statusCode + ", Body: " + responseBody);
             }
 
-            logger.info("✅ Successfully uploaded DICOM to Azure. Status: {}", statusCode);
+            logger.info("Successfully uploaded DICOM to Azure. Status: {}", statusCode);
 
         } catch (IOException | ParseException e) {
             throw new UploadFailedException("IOException during Azure upload: " + e.getMessage());

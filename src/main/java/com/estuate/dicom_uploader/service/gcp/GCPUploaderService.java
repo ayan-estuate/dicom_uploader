@@ -45,7 +45,7 @@ public class GCPUploaderService {
             job.setSeriesUid(attr.getString(Tag.SeriesInstanceUID));
             log.info("Extracted DICOM UIDs — SOP: {}, Study: {}, Series: {}", job.getInstanceUid(), job.getStudyUid(), job.getSeriesUid());
         } catch (Exception e) {
-            log.warn("⚠️ Failed to extract DICOM UIDs for job {}", job.getJobId(), e);
+            log.warn("Failed to extract DICOM UIDs for job {}", job.getJobId(), e);
         }
 
         String dicomUri = String.format(
@@ -73,7 +73,7 @@ public class GCPUploaderService {
                 throw new DicomUploadException("Unexpected response from GCP Healthcare API: HTTP " + statusCode);
             }
 
-            log.info("✅ Successfully uploaded to GCP Healthcare API: HTTP {}", statusCode);
+            log.info("Successfully uploaded to GCP Healthcare API: HTTP {}", statusCode);
 
         } catch (IOException ex) {
             throw new DicomUploadException("Failed to upload DICOM to GCP", ex);
@@ -112,7 +112,7 @@ public class GCPUploaderService {
 
         storage.create(blobInfo, fileData);
 
-        log.info("✅ Uploaded DICOM to GCP Blob Storage at '{}'", blobPath);
+        log.info("Uploaded DICOM to GCP Blob Storage at '{}'", blobPath);
     }
 
     private Bucket safelyFetchBucket(Storage storage, String bucketName, long timeout, TimeUnit unit) {
@@ -120,9 +120,9 @@ public class GCPUploaderService {
             Future<Bucket> future = bucketExecutor.submit(() -> storage.get(bucketName));
             return future.get(timeout, unit);
         } catch (TimeoutException te) {
-            log.error("❌ Timeout fetching bucket '{}'", bucketName);
+            log.error("Timeout fetching bucket '{}'", bucketName);
         } catch (Exception e) {
-            log.error("❌ Error fetching bucket '{}'", bucketName, e);
+            log.error("Error fetching bucket '{}'", bucketName, e);
         }
         return null;
     }

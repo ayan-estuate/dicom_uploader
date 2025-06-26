@@ -14,7 +14,7 @@ public class UploadRequest {
     @NotBlank
     private final String platform;
 
-    @NotBlank
+//    @NotBlank
     private final String storageType;
 
     // Native (Healthcare API)
