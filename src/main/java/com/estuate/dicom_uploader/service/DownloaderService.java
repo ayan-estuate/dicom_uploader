@@ -5,6 +5,8 @@ import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.HttpEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -18,7 +20,11 @@ import java.util.UUID;
 public class DownloaderService {
 
     private final CloseableHttpClient httpClient = HttpClients.custom().build();
-
+    @Retryable(
+            value = { IOException.class, javax.net.ssl.SSLException.class },
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 3000, multiplier = 2)
+    )
     public File downloadToTempFile(String url, String jobId) throws IOException {
         HttpGet request = new HttpGet(url);
         try (var response = httpClient.execute(request)) {

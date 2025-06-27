@@ -42,6 +42,29 @@ public class JobQueueManager {
         return job;
     }
 
+    public Job createSubJob(Job parentJob, String newObjectKey) throws IOException {
+        Job job =  Job.builder()
+                .jobId(UUID.randomUUID().toString())
+                .jobType(parentJob.getJobType())
+                .objectKey(newObjectKey)
+                .platform(parentJob.getPlatform())
+                .storageType(null) // Will be auto-detected later
+                .datasetName(parentJob.getDatasetName())
+                .dicomStoreName(parentJob.getDicomStoreName())
+                .gcpProjectId(parentJob.getGcpProjectId())
+                .location(parentJob.getLocation())
+                .bucketName(parentJob.getBucketName())
+                .blobPath(parentJob.getBlobPath())
+                .blobContainer(parentJob.getBlobContainer())
+                .status(JobStatus.QUEUED)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
+        jobStore.saveJob(job);
+        return job;
+    }
+
+
     public Job enqueueRetrievalJob(DicomRetrievalRequest request) throws IOException {
         Job job = Job.builder()
                 .jobId(UUID.randomUUID().toString())

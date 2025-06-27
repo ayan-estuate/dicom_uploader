@@ -27,11 +27,6 @@ public class UploadOrchestratorService {
     private final CloudUploaderFactory uploaderFactory;
 
     @Async("uploadExecutor")
-    @Retryable(
-            value = { IOException.class, SSLException.class },
-            maxAttempts = 3,
-            backoff = @Backoff(delay = 3000, multiplier = 2)
-    )
     public Future<Void> orchestrateUploadAsync(String presignedUrl, Job job) throws Exception {
         File tempDicom = downloaderService.downloadToTempFile(presignedUrl, job.getJobId());
         byte[] dicomBytes = null;

@@ -1,1 +1,0 @@
-{"jobId":"6ecabae7-a9d7-4892-a97f-b0fb900c9f65","jobType":"UPLOAD","objectKey":"Non-dicom/Vida_Shoulder_pd.tif","platform":"gcp","storageType":"blob","status":"COMPLETED","createdAt":"2025-06-26T05:25:55.428787200Z","updatedAt":"2025-06-26T05:32:36.512068400Z","bucketName":"gcp-blob-bucket-us","blobPath":"studies/2025/07"}
